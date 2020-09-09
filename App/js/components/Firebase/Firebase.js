@@ -31,8 +31,8 @@ class Firebase {
         return this.auth.signInWithEmailAndPassword(email, password);
     };
 
-    signInWithGoogle = () => {
-        // return this.auth.signInWithPopup()
+    signInWithPopupUsingProvider = (provider) => {
+        return this.auth.signInWithPopup(provider);
     }
 
     signOut = () => this.auth.signOut();

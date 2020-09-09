@@ -10,8 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import * as ROUTES from "../constants/routes";
-import FirebaseContext from "./Firebase/context";
-
+import {withFirebase} from "./Firebase/context";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 const SignUpPage = () => {
     const classes = useStyles();
 
@@ -47,16 +48,15 @@ const SignUpPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <FirebaseContext.Consumer>
-                    {firebase => <SignUpForm firebase={firebase}/>}
-                </FirebaseContext.Consumer>
+                <SignUpForm/>
 
             </div>
         </Container>
     );
 };
 
-const SignUpForm = () => {
+const SignUpFormBase = (props) => {
+    const history = useHistory();
     const classes = useStyles();
     const initialState = {
         username: '',
@@ -70,11 +70,14 @@ const SignUpForm = () => {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         const {username, email, passwordOne} = formInput;
-        props.firebase.createUserWithEmailAndPassword(email, passwordOne)
+        props.firebase.newUserEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 console.log(authUser);
                 setFormInput({...initialState});
-            });
+                history.push(ROUTES.SIGN_IN);
+            }).catch(error => {
+            console.log(error.message);
+        });
     }
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -162,9 +165,12 @@ const SignUpForm = () => {
                     </Link>
                 </Grid>
             </Grid>
-            {formInput.error && <p>formInput.error.message</p>}
+            {formInput.error && <p>{formInput.error.message}</p>}
         </form>
     )
 }
 
+const SignUpForm = withFirebase(SignUpFormBase);
+
 export default SignUpPage;
+export {SignUpForm};

@@ -1,6 +1,8 @@
 const path = require("path");
+const webpack = require("webpack");
 const entryPath = "App";
-const entryFile = "index.js";
+const entryFile = "index.js"
+const dotenv = require('dotenv').config({path: __dirname + '/.env'});
 
 module.exports = {
     entry: ["whatwg-fetch", `./${entryPath}/js/${entryFile}`],
@@ -23,5 +25,10 @@ module.exports = {
                 loader: "babel-loader"
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            "process.env": JSON.stringify(process.env)
+        }),
+    ]
 };

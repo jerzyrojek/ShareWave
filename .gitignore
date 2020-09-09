@@ -3,9 +3,9 @@ logs
 npm-debug.log*
 node_modules/
 .sass-cache/
+.env
 
 ### Linux ###
 *~
 ### Webstorm ###
 .idea
-.env

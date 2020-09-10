@@ -14,6 +14,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {withFirebase} from "./Firebase/context";
 import {useHistory} from "react-router-dom";
 import * as ROUTES from "../constants/routes";
+import app from "firebase/app";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 const SignInPage = (props) => {
     const history = useHistory();
     const classes = useStyles();
+    console.log(props);
+    const googleProvider = new app.auth.GoogleAuthProvider();
     const initialState = {
         email: "",
         password: "",
@@ -77,7 +81,13 @@ const SignInPage = (props) => {
         });
     };
 
-    const isInvalid = signInInfo.password ==="" || signInInfo.email ==="";
+    const handleGoogleSignIn = () => {
+        props.firebase.signInWithPopupUsingProvider(googleProvider).then(() => {
+            history.push(ROUTES.HOME);
+        })
+    }
+
+    const isInvalid = signInInfo.password === "" || signInInfo.email === "";
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -130,14 +140,17 @@ const SignInPage = (props) => {
                         >
                             Sign In
                         </Button>
+                        <Button onClick={handleGoogleSignIn} color="secondary">
+                            Google
+                        </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Link href={ROUTES.PASSWORD_FORGET} variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href={ROUTES.SIGN_UP} variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

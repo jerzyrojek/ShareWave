@@ -3,12 +3,12 @@ import {Toolbar} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import * as ROUTES from "../constants/routes";
 import {Link} from "react-router-dom";
-import SignOut from "./Firebase/SignOut";
+import SignOut from "./SignOut";
 import AuthUserContext from "./SessionContext";
 
 const Navbar = () => (
     <>
-        <AppBar positon="sticky">
+        <AppBar positon="fixed">
             <Toolbar>
                 <div>
                     <AuthUserContext.Consumer>
@@ -19,9 +19,8 @@ const Navbar = () => (
             </Toolbar>
         </AppBar>
         <Toolbar/>
-        </>
+    </>
 );
-
 
 
 const NavbarAuthorized = () => {
@@ -44,7 +43,7 @@ const NavbarAuthorized = () => {
 const NavbarNonAuthorized = () => {
     return (
         <ul>
-            <li >
+            <li>
                 <Link to={ROUTES.SIGN_IN}>Sign in</Link>
             </li>
 

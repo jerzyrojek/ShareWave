@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 const SignInPage = (props) => {
     const history = useHistory();
     const classes = useStyles();
-    console.log(props);
     const googleProvider = new app.auth.GoogleAuthProvider();
     const initialState = {
         email: "",

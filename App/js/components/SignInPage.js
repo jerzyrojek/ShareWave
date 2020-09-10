@@ -77,6 +77,8 @@ const SignInPage = (props) => {
         });
     };
 
+    const isInvalid = signInInfo.password ==="" || signInInfo.email ==="";
+
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline/>
@@ -119,6 +121,7 @@ const SignInPage = (props) => {
                             label="Remember me"
                         />
                         <Button
+                            disabled={isInvalid}
                             type="submit"
                             fullWidth
                             variant="contained"

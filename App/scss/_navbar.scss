@@ -17,6 +17,8 @@
     justify-content: center;
   }
   div{
+    display:flex;
+    align-items: center;
     button {
       color:white;
       &:hover {

@@ -1,6 +1,7 @@
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/analytics";
+import "firebase/firestore";
 
 const config = {
     apiKey: process.env.API_KEY,
@@ -20,6 +21,7 @@ class Firebase {
         // app.analytics();
 
         this.auth = app.auth();
+        this.database = app.firestore();
     }
 
 

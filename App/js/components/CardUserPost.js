@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -16,7 +16,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const useStyles = makeStyles(() => ({
     root: {
-        maxWidth: 600,
+        width:"600px",
     },
     media: {
         height: "auto",
@@ -27,14 +27,17 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const CardUserPost = () => {
+const CardUserPost = ({author, timestamp, title, text, currentRating}) => {
     const classes = useStyles();
+    const [rating, setRating] = useState(currentRating);
+    const date = new Date(timestamp?.toDate());
+
     return (
         <Card className={classes.root}>
             <CardHeader
                 avatar={
-                    <Avatar aria-label="recipe" className={classes.avatar}>
-                        JR
+                    <Avatar aria-label="post" className={classes.avatar}>
+                        {author}
                     </Avatar>
                 }
                 action={
@@ -42,8 +45,8 @@ const CardUserPost = () => {
                         <MoreVertIcon/>
                     </IconButton>
                 }
-                title="Test"
-                subheader="September 10, 2020"
+                title={title}
+                subheader={date.toLocaleDateString()}
             />
             <CardMedia
                 className={classes.media}
@@ -52,12 +55,11 @@ const CardUserPost = () => {
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem cum cumque facilis inventore iure
-                    placeat sit veniam. Dignissimos, eligendi, enim ex facere fuga hic maxime molestiae necessitatibus
-                    odio recusandae rem.
+                    {text}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
+                <Typography>{rating}</Typography>
                 <IconButton aria-label="thumbsUp">
                     <ThumbUpIcon/>
                 </IconButton>

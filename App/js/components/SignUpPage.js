@@ -72,7 +72,10 @@ const SignUpFormBase = (props) => {
         const {username, email, passwordOne} = formInput;
         props.firebase.newUserEmailAndPassword(email, passwordOne)
             .then(authUser => {
-                console.log(authUser);
+                props.firebase.database.collection("users").add({
+                    username:username,
+                    email:email,
+                });
                 setFormInput({...initialState});
                 history.push(ROUTES.SIGN_IN);
             }).catch(error => {

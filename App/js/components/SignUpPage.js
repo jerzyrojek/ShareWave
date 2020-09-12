@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
 const SignUpPage = () => {
     const classes = useStyles();
 
@@ -73,9 +72,10 @@ const SignUpFormBase = (props) => {
         props.firebase.newUserEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 props.firebase.database.collection("users").add({
-                    username:username,
-                    email:email,
+                    username: username,
+                    email: email,
                 });
+                props.firebase.auth.currentUser.updateProfile({displayName: username});
                 setFormInput({...initialState});
                 history.push(ROUTES.SIGN_IN);
             }).catch(error => {

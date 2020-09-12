@@ -11,6 +11,7 @@ import {withFirebase} from "./components/Firebase/context";
 import AuthUserContext from "./components/SessionContext";
 import UserPostsMain from "./components/UserPostsMain";
 import {Switch} from "react-router-dom";
+import NotFoundPage from "./components/NotFoundPage";
 
 const theme = createMuiTheme({
     palette: {
@@ -26,7 +27,6 @@ const theme = createMuiTheme({
 const App = (props) => {
 
     const [authUser, setAuthUser] = useState(null);
-
     useEffect(() => {
         const listener = props.firebase.auth.onAuthStateChanged(authUser => {
             {
@@ -38,7 +38,8 @@ const App = (props) => {
             listener();
         }
 
-    })
+    },[]);
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -50,7 +51,10 @@ const App = (props) => {
                             <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
                             <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
                             <Route path={ROUTES.ACCOUNT}/>
+                            <Route path={ROUTES.PASSWORD_FORGET}/>
+                            <Route path={ROUTES.ADMIN}/>
                             <Route exact path={ROUTES.HOME} component={UserPostsMain}/>
+                            <Route path="*" component={NotFoundPage}/>
                         </Switch>
                     </div>
                 </BrowserRouter>

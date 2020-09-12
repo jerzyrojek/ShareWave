@@ -11,11 +11,12 @@
     width: 2rem;
     height: auto;
   }
-  div {
+  .app__logo a{
     display: flex;
     align-items: center;
     justify-content: center;
-
+  }
+  div{
     button {
       color:white;
       &:hover {

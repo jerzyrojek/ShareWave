@@ -19,15 +19,15 @@ const useStyles = makeStyles(() => ({
         width:"600px",
     },
     media: {
-        height: "auto",
-        paddingTop: '65.25%',
+        height:"auto",
+        paddingTop: '60%',
     },
     avatar: {
         backgroundColor: red[500],
     },
 }));
 
-const CardUserPost = ({author, timestamp, title, text, currentRating}) => {
+const CardUserPost = ({author, timestamp, title, text, currentRating, media, tags}) => {
     const classes = useStyles();
     const [rating, setRating] = useState(currentRating);
     const date = new Date(timestamp?.toDate());
@@ -37,7 +37,7 @@ const CardUserPost = ({author, timestamp, title, text, currentRating}) => {
             <CardHeader
                 avatar={
                     <Avatar aria-label="post" className={classes.avatar}>
-                        {author}
+                        {author.charAt(0)}
                     </Avatar>
                 }
                 action={
@@ -48,11 +48,12 @@ const CardUserPost = ({author, timestamp, title, text, currentRating}) => {
                 title={title}
                 subheader={date.toLocaleDateString()}
             />
-            <CardMedia
-                className={classes.media}
-                image="../../assets/example.jpg"
-                title="postImage"
-            />
+            {/*<CardMedia*/}
+            {/*    className={classes.media}*/}
+            {/*    image={media}*/}
+            {/*    title="postImage"*/}
+            {/*/>*/}
+            <img style={{madWidth:"100%", width:"100%", height:"auto", objectFit:"contain"}} alt="image" src={media}/>
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
                     {text}

@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import HomeIcon from '@material-ui/icons/Home';
 import IconButton from "@material-ui/core/IconButton";
 import {makeStyles} from "@material-ui/core/styles";
+import AddBoxRoundedIcon from '@material-ui/icons/AddBoxRounded';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,9 +25,12 @@ const Navbar = () => {
             <AppBar className={classes.appBar} positon="sticky">
                 <Toolbar>
                     <div className="app__navbar">
-                        <div>
-                            <Typography variant="h5" color="secondary"><span>Share</span>Wave</Typography>
-                            <img alt="logo" src="../../assets/logo.png"/>
+
+                        <div className="app__logo">
+                            <Link to={ROUTES.HOME}>
+                                <Typography variant="h5" color="secondary"><span>Share</span>Wave</Typography>
+                                <img alt="logo" src="../../assets/logo.png"/>
+                            </Link>
                         </div>
                         <AuthUserContext.Consumer>
                             {authUser => authUser ? <NavbarAuthorized/> : <NavbarNonAuthorized/>}
@@ -45,6 +49,7 @@ const NavbarAuthorized = () => {
     return (
         <div>
             <Link color="secondary" to={ROUTES.HOME}><IconButton><HomeIcon/>Home</IconButton></Link>
+            <IconButton><AddBoxRoundedIcon/>Upload</IconButton>
             <Link to={ROUTES.ACCOUNT}>Account</Link>
             <SignOut/>
         </div>

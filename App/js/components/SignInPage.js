@@ -139,7 +139,7 @@ const SignInPage = (props) => {
                         >
                             Sign In
                         </Button>
-                        <Button onClick={handleGoogleSignIn} color="secondary">
+                        <Button onClick={handleGoogleSignIn} color="secondary" fullWidth variant="contained">
                             Google
                         </Button>
                         <Grid container>

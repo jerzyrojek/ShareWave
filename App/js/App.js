@@ -9,7 +9,8 @@ import SignInPage from "./components/SignInPage";
 import SignUpPage from "./components/SignUpPage";
 import {withFirebase} from "./components/Firebase/context";
 import AuthUserContext from "./components/SessionContext";
-
+import UserPostsMain from "./components/UserPostsMain";
+import {Switch} from "react-router-dom";
 
 const theme = createMuiTheme({
     palette: {
@@ -17,7 +18,7 @@ const theme = createMuiTheme({
             main: blueGrey[900]
         },
         secondary: {
-            main: "#ff3d00"
+            main: "#2196f3"
         },
     },
 })
@@ -28,27 +29,33 @@ const App = (props) => {
 
     useEffect(() => {
         const listener = props.firebase.auth.onAuthStateChanged(authUser => {
-            {authUser ? setAuthUser(authUser) : setAuthUser(null)}
+            {
+                authUser ? setAuthUser(authUser) : setAuthUser(null)
+            }
         });
 
         return () => {
             listener();
         }
 
-    },)
+    })
 
     return (
         <ThemeProvider theme={theme}>
             <AuthUserContext.Provider value={authUser}>
-            <BrowserRouter>
-                <Navbar/>
-                <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
-                <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
-            </BrowserRouter>
+                <BrowserRouter>
+                    <div className="app">
+                        <Navbar/>
+                        <Switch>
+                            <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
+                            <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
+                            <Route path={ROUTES.ACCOUNT}/>
+                            <Route exact path={ROUTES.HOME} component={UserPostsMain}/>
+                        </Switch>
+                    </div>
+                </BrowserRouter>
             </AuthUserContext.Provider>
         </ThemeProvider>
-
-
     );
 };
 

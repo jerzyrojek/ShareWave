@@ -1,8 +1,9 @@
 import React from 'react';
 import {withFirebase} from "./Firebase/context";
-import Button from "@material-ui/core/Button";
 import {useHistory} from "react-router-dom";
 import * as ROUTES from "../constants/routes";
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import {IconButton} from "@material-ui/core";
 
 const SignOut = (props) => {
 
@@ -14,9 +15,9 @@ const SignOut = (props) => {
     };
 
     return (
-        <Button onClick={handleClickSignOut}>
-            Sign Out
-        </Button>
+        <IconButton onClick={handleClickSignOut}>
+          <MeetingRoomIcon/>  Logout
+        </IconButton>
     );
 };
 

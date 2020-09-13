@@ -32,6 +32,7 @@ const UserPostsMain = (props) => {
                 {posts && posts.map((post, index) => {
                         return (
                             <CardUserPost
+                                id={post.id}
                                 key={index}
                                 title={post.title}
                                 timestamp={post.timestamp}

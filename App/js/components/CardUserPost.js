@@ -13,13 +13,15 @@ import CommentIcon from '@material-ui/icons/Comment';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import {useHistory} from "react-router-dom";
+import * as ROUTES from "../constants/routes";
 
 const useStyles = makeStyles(() => ({
     root: {
-        width:"600px",
+        width: "600px",
     },
     media: {
-        height:"auto",
+        height: "auto",
         paddingTop: '60%',
     },
     avatar: {
@@ -27,51 +29,63 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const CardUserPost = ({author, timestamp, title, text, currentRating, media, tags}) => {
+const CardUserPost = ({ id ,author, timestamp, title, text, currentRating, media, tags}) => {
     const classes = useStyles();
     const [rating, setRating] = useState(currentRating);
     const date = new Date(timestamp?.toDate());
+    const history = useHistory();
+
+    const handleSelectPost = () => {
+        if (id) {
+            history.push(`post/${id}`);
+        } else {
+            history.push(`${ROUTES.NOT_FOUND}`);
+        }
+    }
 
     return (
-        <Card className={classes.root}>
-            <CardHeader
-                avatar={
-                    <Avatar aria-label="post" className={classes.avatar}>
-                        {author.charAt(0)}
-                    </Avatar>
-                }
-                action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon/>
+        <>
+            {id && <Card className={classes.root}>
+                <CardHeader onClick={handleSelectPost}
+                    avatar={
+                        <Avatar aria-label="post" className={classes.avatar}>
+                            {author.charAt(0)}
+                        </Avatar>
+                    }
+                    action={
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon/>
+                        </IconButton>
+                    }
+                    title={title}
+                    subheader={date.toLocaleDateString()}
+                />
+                {/*<CardMedia*/}
+                {/*    className={classes.media}*/}
+                {/*    image={media}*/}
+                {/*    title="postImage"*/}
+                {/*/>*/}
+                <img onClick={handleSelectPost} style={{cursor:"pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}} alt="image"
+                     src={media}/>
+                <CardContent>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        {text}
+                    </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                    <Typography>{rating}</Typography>
+                    <IconButton aria-label="thumbsUp">
+                        <ThumbUpIcon/>
                     </IconButton>
-                }
-                title={title}
-                subheader={date.toLocaleDateString()}
-            />
-            {/*<CardMedia*/}
-            {/*    className={classes.media}*/}
-            {/*    image={media}*/}
-            {/*    title="postImage"*/}
-            {/*/>*/}
-            <img style={{madWidth:"100%", width:"100%", height:"auto", objectFit:"contain"}} alt="image" src={media}/>
-            <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {text}
-                </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-                <Typography>{rating}</Typography>
-                <IconButton aria-label="thumbsUp">
-                    <ThumbUpIcon/>
-                </IconButton>
-                <IconButton aria-label="thumbsDown">
-                    <ThumbDownIcon/>
-                </IconButton>
-                <IconButton aria-label="comments">
-                    <CommentIcon/>
-                </IconButton>
-            </CardActions>
-        </Card>
+                    <IconButton aria-label="thumbsDown">
+                        <ThumbDownIcon/>
+                    </IconButton>
+                    <IconButton aria-label="comments">
+                        <CommentIcon/>
+                    </IconButton>
+                </CardActions>
+            </Card>}
+        </>
     );
 }
 

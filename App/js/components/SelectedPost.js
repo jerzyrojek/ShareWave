@@ -13,6 +13,12 @@ import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import {Button} from "@material-ui/core";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 
 const useStyles = makeStyles(() => ({
@@ -33,8 +39,10 @@ const SelectedPost = (props) => {
     const classes = useStyles();
     const {postId} = useParams();
     const [selectedPostDetails, setSelectedPostDetails] = useState();
+    const [commentInput, setCommentInput] = useState({});
+    const [comments, setComments] = useState(false);
 
-    console.log(selectedPostDetails);
+    console.log(commentInput);
 
     useEffect(() => {
         if (postId) {
@@ -43,27 +51,55 @@ const SelectedPost = (props) => {
                     setSelectedPostDetails(snapshot.data());
                 }))
         }
+        props.firebase.database.collection("posts").doc(postId).collection("comments")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((snapshot => {
+                setComments(prev => snapshot.docs.map(doc => doc.data()))
+            }));
+
     }, []);
+
+    const handleOnChange = (e) => {
+        const {name, value} = e.target;
+        setCommentInput((prev) => {
+            return {...prev, [name]: value}
+        });
+    }
+
+
+    const handleCommentSubmit = (e) => {
+        e.preventDefault();
+        props.firebase.database.collection("posts").doc(postId).collection("comments")
+            .add({
+                ...commentInput,
+                author: props.firebase.auth.currentUser.displayName,
+                timestamp: new Date(),
+            })
+        console.log("clicked!")
+        setCommentInput(prevState => {
+            return {...prevState, comment: ""}
+        })
+    }
 
     return (
         <div className="container">
             {selectedPostDetails &&
             <Card className={classes.root}>
                 <CardHeader
-                            avatar={
-                                <Avatar aria-label="post" className={classes.avatar}>
-                                    {selectedPostDetails.author.charAt(0)}
-                                </Avatar>
-                            }
-                            action={
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon/>
-                                </IconButton>
-                            }
-                            title={selectedPostDetails.title}
-                            subheader={selectedPostDetails.timestamp.toDate().toLocaleDateString()}
+                    avatar={
+                        <Avatar aria-label="post" className={classes.avatar}>
+                            {selectedPostDetails.author.charAt(0)}
+                        </Avatar>
+                    }
+                    action={
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon/>
+                        </IconButton>
+                    }
+                    title={selectedPostDetails.title}
+                    subheader={selectedPostDetails.timestamp.toDate().toLocaleDateString()}
                 />
-                <img style={{ madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}} alt="image"
+                <img style={{madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}} alt="image"
                      src={selectedPostDetails.media}/>
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
@@ -81,7 +117,42 @@ const SelectedPost = (props) => {
                 </CardActions>
             </Card>}
 
-
+            <form onSubmit={handleCommentSubmit}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            onChange={handleOnChange}
+                            name="comment"
+                            value={setCommentInput.comment}
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="comment"
+                            helperText="Maximum 500 characters"
+                            label="Type your comment"
+                            multiline={true}
+                            rowsMax="7"
+                            inputProps={{maxLength: 500}}
+                        />
+                    </Grid>
+                </Grid>
+                <Button type="submit"
+                        variant="contained"
+                        color="secondary">
+                    Post comment
+                </Button>
+            </form>
+            <div className="post__comments">
+                <List>
+                    {comments && comments.map((el, index) => {
+                        return <ListItem className="comment__details" key={index}>
+                            <ListItemText primary={el.author} secondary={el.timestamp.toDate().toLocaleTimeString()}/>
+                            <p>{el.comment}</p>
+                            <hr/>
+                        </ListItem>
+                    })}
+                </List>
+            </div>
         </div>
     );
 };

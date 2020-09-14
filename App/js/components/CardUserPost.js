@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
@@ -14,7 +13,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import {useHistory} from "react-router-dom";
-import * as ROUTES from "../constants/routes";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -38,8 +36,6 @@ const CardUserPost = ({ id ,author, timestamp, title, text, currentRating, media
     const handleSelectPost = () => {
         if (id) {
             history.push(`post/${id}`);
-        } else {
-            history.push(`${ROUTES.NOT_FOUND}`);
         }
     }
 
@@ -60,11 +56,6 @@ const CardUserPost = ({ id ,author, timestamp, title, text, currentRating, media
                     title={title}
                     subheader={date.toLocaleDateString()}
                 />
-                {/*<CardMedia*/}
-                {/*    className={classes.media}*/}
-                {/*    image={media}*/}
-                {/*    title="postImage"*/}
-                {/*/>*/}
                 <img onClick={handleSelectPost} style={{cursor:"pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}} alt="image"
                      src={media}/>
                 <CardContent>

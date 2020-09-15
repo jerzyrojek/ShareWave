@@ -11,14 +11,13 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import {Button} from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Rating from "./Rating";
 
 
 const useStyles = makeStyles(() => ({
@@ -41,8 +40,6 @@ const SelectedPost = (props) => {
     const [selectedPostDetails, setSelectedPostDetails] = useState();
     const [commentInput, setCommentInput] = useState({});
     const [comments, setComments] = useState(false);
-
-    console.log(commentInput);
 
     useEffect(() => {
         if (postId) {
@@ -74,8 +71,7 @@ const SelectedPost = (props) => {
                 ...commentInput,
                 author: props.firebase.auth.currentUser.displayName,
                 timestamp: new Date(),
-            })
-        console.log("clicked!")
+            });
         setCommentInput(prevState => {
             return {...prevState, comment: ""}
         })
@@ -107,13 +103,7 @@ const SelectedPost = (props) => {
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <Typography>{selectedPostDetails.rating}</Typography>
-                    <IconButton aria-label="thumbsUp">
-                        <ThumbUpIcon/>
-                    </IconButton>
-                    <IconButton aria-label="thumbsDown">
-                        <ThumbDownIcon/>
-                    </IconButton>
+                    <Rating postId={postId}/>
                 </CardActions>
             </Card>}
 
@@ -146,7 +136,7 @@ const SelectedPost = (props) => {
                 <List>
                     {comments && comments.map((el, index) => {
                         return <ListItem className="comment__details" key={index}>
-                            <ListItemText primary={el.author} secondary={el.timestamp.toDate().toLocaleTimeString()}/>
+                            <ListItemText primary={el.author} secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
                             <p>{el.comment}</p>
                             <hr/>
                         </ListItem>

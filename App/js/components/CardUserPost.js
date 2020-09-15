@@ -10,9 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import {red} from '@material-ui/core/colors';
 import CommentIcon from '@material-ui/icons/Comment';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import {useHistory} from "react-router-dom";
+import Rating from "./Rating";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -29,15 +28,16 @@ const useStyles = makeStyles(() => ({
 
 const CardUserPost = ({ id ,author, timestamp, title, text, currentRating, media, tags}) => {
     const classes = useStyles();
-    const [rating, setRating] = useState(currentRating);
     const date = new Date(timestamp?.toDate());
     const history = useHistory();
+
 
     const handleSelectPost = () => {
         if (id) {
             history.push(`post/${id}`);
         }
     }
+
 
     return (
         <>
@@ -64,13 +64,7 @@ const CardUserPost = ({ id ,author, timestamp, title, text, currentRating, media
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <Typography>{rating}</Typography>
-                    <IconButton aria-label="thumbsUp">
-                        <ThumbUpIcon/>
-                    </IconButton>
-                    <IconButton aria-label="thumbsDown">
-                        <ThumbDownIcon/>
-                    </IconButton>
+                    <Rating postId={id}/>
                     <IconButton aria-label="comments">
                         <CommentIcon/>
                     </IconButton>

@@ -15,6 +15,7 @@ import {withFirebase} from "./Firebase/context";
 import {useHistory} from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import app from "firebase/app";
+import AlertComponent from "./Alert";
 
 
 
@@ -69,10 +70,14 @@ const SignInPage = (props) => {
                 setSignInInfo({...initialState});
                 history.push(ROUTES.HOME);
             }).catch(err => {
-            console.log(err);
+            //    check why this is highlighted by Webstorm
+            setSignInInfo(prevState => (
+                {...prevState,
+                error: err,
+                }
+            ))
         });
     }
-
     const handleOnChange = (e) => {
         const {name, value} = e.target;
         setSignInInfo((prev) => {
@@ -156,6 +161,8 @@ const SignInPage = (props) => {
                         </Grid>
                     </form>
                 </div>
+                {signInInfo.error && <AlertComponent type="error" runAlert={true} message={signInInfo.error.message}/>}
+            {/*    needs to be fixed to be fired every time instead of just once*/}
             </Grid>
         </Grid>
     );

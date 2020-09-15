@@ -6,8 +6,6 @@ import {Link} from "react-router-dom";
 import SignOut from "./SignOut";
 import AuthUserContext from "./SessionContext";
 import Typography from "@material-ui/core/Typography";
-import HomeIcon from '@material-ui/icons/Home';
-import IconButton from "@material-ui/core/IconButton";
 import {makeStyles} from "@material-ui/core/styles";
 import FileUploadModal from "./FileUploadModal";
 
@@ -48,7 +46,6 @@ const Navbar = () => {
 const NavbarAuthorized = () => {
     return (
         <div className="app__menu">
-            <Link color="secondary" to={ROUTES.HOME}><IconButton><HomeIcon/>Home</IconButton></Link>
             <FileUploadModal/>
             <Link to={ROUTES.ACCOUNT}>Account</Link>
             <SignOut/>
@@ -60,7 +57,6 @@ const NavbarAuthorized = () => {
 const NavbarNonAuthorized = () => {
     return (
         <div>
-            <Link color="secondary" to={ROUTES.HOME}><IconButton><HomeIcon/>Home</IconButton></Link>
             <Link to={ROUTES.SIGN_IN}>Sign in</Link>
             <Link to={ROUTES.SIGN_UP}>Sign up</Link>
         </div>

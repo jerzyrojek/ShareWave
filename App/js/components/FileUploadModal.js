@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import IconButton from "@material-ui/core/IconButton";
 import AddBoxRoundedIcon from "@material-ui/icons/AddBoxRounded";
 import FileUpload from "./FileUpload";
 
@@ -37,7 +36,7 @@ const FileUploadModal = () => {
 
     return (
         <div>
-            <IconButton onClick={handleOpen}><AddBoxRoundedIcon/>Upload</IconButton>
+            <button style={{outline:"none", border:"0", display:"flex", alignItems:"center", backgroundColor:"#263238", padding:"0", fontSize:"1.3rem"}} onClick={handleOpen}><AddBoxRoundedIcon/>Upload</button>
             <Modal
                 className={classes.modal}
                 open={open}

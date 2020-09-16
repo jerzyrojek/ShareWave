@@ -9,7 +9,9 @@ const UserPostsMain = (props) => {
 
 
     useEffect(() => {
-        props.firebase.database.collection("posts").onSnapshot(snapshot => (
+        props.firebase.database.collection("posts")
+            .orderBy("timestamp", "desc")
+            .onSnapshot(snapshot => (
             setPosts(snapshot.docs.map(doc => ({
                     id: doc.id,
                     author: doc.data().author,
@@ -18,6 +20,7 @@ const UserPostsMain = (props) => {
                     text: doc.data().text,
                     rating: doc.data().rating,
                     media: doc.data().media,
+                    mediaType: doc.data().mediaType,
                     tags: doc.data().tags
                 }))
             )));
@@ -38,8 +41,8 @@ const UserPostsMain = (props) => {
                                 timestamp={post.timestamp}
                                 author={post.author}
                                 text={post.text}
-                                currentRating={post.rating}
                                 media={post.media}
+                                mediaType={post.mediaType}
                                 tags={post.tags}
                             />
                         )

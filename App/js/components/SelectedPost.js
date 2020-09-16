@@ -18,6 +18,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Rating from "./Rating";
+import AuthUserContext from "./SessionContext";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import * as ROUTES from "../constants/routes";
+
 
 
 const useStyles = makeStyles(() => ({
@@ -93,17 +98,34 @@ const SelectedPost = (props) => {
                         </IconButton>
                     }
                     title={selectedPostDetails.title}
-                    subheader={selectedPostDetails.timestamp.toDate().toLocaleDateString()}
+                    subheader={selectedPostDetails.timestamp.toDate().toLocaleString("pl-PL")}
                 />
-                <img style={{madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}} alt="image"
-                     src={selectedPostDetails.media}/>
+                {selectedPostDetails.media &&
+                <img
+                    style={{cursor: "pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}}
+                    alt="image"
+                    src={selectedPostDetails.media}/>
+                }
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {selectedPostDetails.text}
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <Rating postId={postId}/>
+                    <AuthUserContext.Consumer>
+                        {authUser => authUser ? <Rating postId={postId}/>
+                            :
+                            <>
+                                <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
+                                    <ThumbUpIcon/>
+                                </IconButton>
+                                <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsDown">
+                                    <ThumbDownIcon/>
+                                </IconButton>
+                            </>
+                        }
+                    </AuthUserContext.Consumer>
+
                 </CardActions>
             </Card>}
 
@@ -136,7 +158,8 @@ const SelectedPost = (props) => {
                 <List>
                     {comments && comments.map((el, index) => {
                         return <ListItem className="comment__details" key={index}>
-                            <ListItemText primary={el.author} secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
+                            <ListItemText primary={el.author}
+                                          secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
                             <p>{el.comment}</p>
                             <hr/>
                         </ListItem>

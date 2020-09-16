@@ -26,17 +26,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const FileUpload = (props) => {
+const FileUpload = ({close, ...props}) => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState(null);
     const [url, setUrl] = useState(null);
     const [postDetails, setPostDetails] = useState({
         author: props.firebase.auth.currentUser.displayName,
+        userId: props.firebase.auth.currentUser.uid,
         timestamp: "",
         title: "",
-        media: "",
         text: "",
-        rating: 0,
         tags: [],
     });
 
@@ -55,32 +54,42 @@ const FileUpload = (props) => {
 
     const handleUploadSubmit = (e) => {
         e.preventDefault();
-        const uploadFile = props.firebase.storage.ref(`media/${selectedFile.name}`).put(selectedFile);
-        uploadFile.on("state_changed",
-            snapshot => {
-            },
-            error => {
-                console.log(error);
-            },
-            () => {
-                props.firebase.storage.ref("media").child(selectedFile.name).getDownloadURL().then(urlFromFirebase =>
-                    setUrl(urlFromFirebase))
-            }
-        )
+        if (selectedFile) {
+            const uploadFile = props.firebase.storage.ref(`media/${selectedFile.name}`).put(selectedFile);
+            uploadFile.on("state_changed",
+                snapshot => {
+                },
+                error => {
+                    console.log(error);
+                },
+                () => {
+                    props.firebase.storage.ref("media").child(selectedFile.name).getDownloadURL().then(urlFromFirebase =>
+                        setUrl(urlFromFirebase))
+                }
+            )
+
+        } else {
+            props.firebase.database.collection("posts").add({
+                ...postDetails,
+                timestamp: new Date(),
+            });
+        }
         console.log("Uploaded!")
     };
+
 
     useEffect(() => {
         {
             url && props.firebase.database.collection("posts").add({
                 ...postDetails,
                 media: url,
+                mediaType:"",
                 timestamp: new Date(),
             });
         }
 
         return () => {
-            
+
         }
     }, [url]);
 

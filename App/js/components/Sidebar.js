@@ -52,7 +52,7 @@ const Sidebar = (props) => {
 
     const handleSelectCategory = (category) => {
             if(category){
-                history.push(`category/${category.name}`);
+                history.push(`/category/${category.name}`);
             }
     }
 
@@ -86,6 +86,7 @@ const Sidebar = (props) => {
                             <ListItemIcon><CategoryIcon/></ListItemIcon>
                             <ListItemText primary="Categories"/>
                         </ListItem>
+                        <Divider/>
                         {categories && categories.map((category, index) => {
                             return <ListItem button key={index} onClick={() => handleSelectCategory(category)}>
                                 {/*<ListItemIcon></ListItemIcon>*/}

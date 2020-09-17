@@ -28,7 +28,7 @@ const SelectedCategory = (props) => {
                     );
                 });
         }
-    }, [selectedCategoryName])
+    }, [selectedCategoryName,categoryPosts])
 
 
     return (

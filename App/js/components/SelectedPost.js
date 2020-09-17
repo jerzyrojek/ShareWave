@@ -22,7 +22,7 @@ import AuthUserContext from "./SessionContext";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import * as ROUTES from "../constants/routes";
-
+import Sidebar from "./Sidebar";
 
 
 const useStyles = makeStyles(() => ({
@@ -83,88 +83,99 @@ const SelectedPost = (props) => {
     }
 
     return (
-        <div className="container">
-            {selectedPostDetails &&
-            <Card className={classes.root}>
-                <CardHeader
-                    avatar={
-                        <Avatar aria-label="post" className={classes.avatar}>
-                            {selectedPostDetails.author.charAt(0)}
-                        </Avatar>
-                    }
-                    action={
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon/>
-                        </IconButton>
-                    }
-                    title={selectedPostDetails.title}
-                    subheader={selectedPostDetails.timestamp.toDate().toLocaleString("pl-PL")}
-                />
-                {selectedPostDetails.media &&
-                <img
-                    style={{cursor: "pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}}
-                    alt="image"
-                    src={selectedPostDetails.media}/>
-                }
-                <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {selectedPostDetails.text}
-                    </Typography>
-                </CardContent>
-                <CardActions disableSpacing>
-                    <AuthUserContext.Consumer>
-                        {authUser => authUser ? <Rating postId={postId}/>
-                            :
-                            <>
-                                <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
-                                    <ThumbUpIcon/>
-                                </IconButton>
-                                <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsDown">
-                                    <ThumbDownIcon/>
-                                </IconButton>
-                            </>
+        <div className="app__body">
+            <div className="app_sidebar">
+                <Sidebar/>
+            </div>
+            <div className="container">
+                {selectedPostDetails &&
+                <Card className={classes.root}>
+                    <CardHeader
+                        avatar={
+                            <Avatar aria-label="post" className={classes.avatar}>
+                                {selectedPostDetails.author.charAt(0)}
+                            </Avatar>
                         }
-                    </AuthUserContext.Consumer>
+                        action={
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon/>
+                            </IconButton>
+                        }
+                        title={selectedPostDetails.title}
+                        subheader={selectedPostDetails.timestamp.toDate().toLocaleString("pl-PL")}
+                    />
+                    {selectedPostDetails.media &&
+                    <img
+                        style={{
+                            cursor: "pointer",
+                            madWidth: "100%",
+                            width: "100%",
+                            height: "auto",
+                            objectFit: "contain"
+                        }}
+                        alt="image"
+                        src={selectedPostDetails.media}/>
+                    }
+                    <CardContent>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {selectedPostDetails.text}
+                        </Typography>
+                    </CardContent>
+                    <CardActions disableSpacing>
+                        <AuthUserContext.Consumer>
+                            {authUser => authUser ? <Rating postId={postId}/>
+                                :
+                                <>
+                                    <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
+                                        <ThumbUpIcon/>
+                                    </IconButton>
+                                    <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsDown">
+                                        <ThumbDownIcon/>
+                                    </IconButton>
+                                </>
+                            }
+                        </AuthUserContext.Consumer>
 
-                </CardActions>
-            </Card>}
+                    </CardActions>
+                </Card>}
 
-            <form onSubmit={handleCommentSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            onChange={handleOnChange}
-                            name="comment"
-                            value={setCommentInput.comment}
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="comment"
-                            helperText="Maximum 500 characters"
-                            label="Type your comment"
-                            multiline={true}
-                            rowsMax="7"
-                            inputProps={{maxLength: 500}}
-                        />
+                <form onSubmit={handleCommentSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                onChange={handleOnChange}
+                                name="comment"
+                                value={setCommentInput.comment}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="comment"
+                                helperText="Maximum 500 characters"
+                                label="Type your comment"
+                                multiline={true}
+                                rowsMax="7"
+                                inputProps={{maxLength: 500}}
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Button type="submit"
-                        variant="contained"
-                        color="secondary">
-                    Post comment
-                </Button>
-            </form>
-            <div className="post__comments">
-                <List>
-                    {comments && comments.map((el, index) => {
-                        return <ListItem className="comment__details" key={index}>
-                            <ListItemText primary={el.author}
-                                          secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
-                            <p>{el.comment}</p>
-                            <hr/>
-                        </ListItem>
-                    })}
-                </List>
+                    <Button type="submit"
+                            variant="contained"
+                            color="secondary">
+                        Post comment
+                    </Button>
+                </form>
+                <div className="post__comments">
+                    <List>
+                        {comments && comments.map((el, index) => {
+                            return <ListItem className="comment__details" key={index}>
+                                <ListItemText primary={el.author}
+                                              secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
+                                <p>{el.comment}</p>
+                                <hr/>
+                            </ListItem>
+                        })}
+                    </List>
+                </div>
             </div>
         </div>
     );

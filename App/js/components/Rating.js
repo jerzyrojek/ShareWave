@@ -30,11 +30,11 @@ const Rating = ({postId, ...props}) => {
             if (mounted) {
                 return setCurrentCountState(currentCount);
             }
-        })
+        });
 
         return () => {
             {
-                mounted = false
+                mounted = false;
             }
         };
 

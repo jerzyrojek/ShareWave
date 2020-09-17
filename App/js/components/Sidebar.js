@@ -41,7 +41,7 @@ const Sidebar = (props) => {
 
     useEffect(() => {
         props.firebase.database.collection("categories")
-            .orderBy("name", "desc")
+            .orderBy("name", "asc")
             .onSnapshot(snapshot => {
                 setCategories(snapshot.docs.map((doc) => ({
                     name: doc.data().name,

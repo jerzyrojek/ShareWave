@@ -5,4 +5,5 @@ export const ACCOUNT = "/account";
 export const PASSWORD_FORGET = "/pw-reset";
 export const ADMIN = "/admin";
 export const POST = "/post/:postId";
+export const CATEGORY = "/category/:categoryName";
 export const NOT_FOUND = "*";

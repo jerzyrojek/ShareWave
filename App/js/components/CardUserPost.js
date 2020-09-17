@@ -39,7 +39,7 @@ const CardUserPost = ({id, author, timestamp, title, text, currentRating, media,
 
     const handleSelectPost = () => {
         if (id) {
-            history.push(`post/${id}`);
+            history.push(`/post/${id}`);
         }
     }
 

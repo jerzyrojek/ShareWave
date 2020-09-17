@@ -4,6 +4,10 @@ import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import {FormControl} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -24,11 +28,16 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    select: {
+        minWidth: 120,
+        margin: "0.5rem 0",
+    }
 }));
 
 const FileUpload = ({close, ...props}) => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectOptions, setSelectOptions] = useState(null);
     const [url, setUrl] = useState(null);
     const [postDetails, setPostDetails] = useState({
         author: props.firebase.auth.currentUser.displayName,
@@ -36,8 +45,33 @@ const FileUpload = ({close, ...props}) => {
         timestamp: "",
         title: "",
         text: "",
-        tags: [],
+        category: "",
     });
+
+    useEffect(() => {
+        props.firebase.database.collection("categories")
+            .onSnapshot(snapshot => {
+                setSelectOptions(snapshot.docs.map(doc => ({
+                    name: doc.data().name,
+                })))
+            })
+    }, [])
+
+
+    useEffect(() => {
+        {
+            url && props.firebase.database.collection("posts").add({
+                ...postDetails,
+                media: url,
+                mediaType: "",
+                timestamp: new Date(),
+            });
+        }
+
+        return () => {
+
+        }
+    }, [url]);
 
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -74,24 +108,7 @@ const FileUpload = ({close, ...props}) => {
                 timestamp: new Date(),
             });
         }
-        console.log("Uploaded!")
     };
-
-
-    useEffect(() => {
-        {
-            url && props.firebase.database.collection("posts").add({
-                ...postDetails,
-                media: url,
-                mediaType:"",
-                timestamp: new Date(),
-            });
-        }
-
-        return () => {
-
-        }
-    }, [url]);
 
     return (
         <div className="app__upload">
@@ -122,16 +139,30 @@ const FileUpload = ({close, ...props}) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            onChange={handleOnChange}
-                            value={postDetails.tags}
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="tags"
-                            label="Tags"
-                            id="tags"
-                        />
+                            <FormControl variant="outlined" className={classes.select}>
+                                <InputLabel id="categorySelect">Category</InputLabel>
+                                <Select
+                                    labelId="category"
+                                    name="category"
+                                    id="category"
+                                    fullWidth
+                                    defaultValue={-1}
+                                    onChange={handleOnChange}
+                                    label="Category"
+                                >
+                                    <MenuItem disabled value={-1}>
+                                        <em>Please choose a category</em>
+                                    </MenuItem>
+                                    {selectOptions && selectOptions.map((option, index) => {
+                                        return (
+                                            <MenuItem key={index} value={option.name}>
+                                                <em>{option.name}</em>
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+
                     </Grid>
                 </Grid>
                 <Button

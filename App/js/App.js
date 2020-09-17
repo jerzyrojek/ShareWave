@@ -13,6 +13,7 @@ import UserPostsMain from "./components/UserPostsMain";
 import {Switch} from "react-router-dom";
 import NotFoundPage from "./components/NotFoundPage";
 import SelectedPost from "./components/SelectedPost";
+import SelectedCategory from "./components/SelectedCategory";
 
 const theme = createMuiTheme({
     palette: {
@@ -55,6 +56,7 @@ const App = (props) => {
                             <Route path={ROUTES.PASSWORD_FORGET}/>
                             <Route path={ROUTES.ADMIN}/>
                             <Route path={ROUTES.POST} component={SelectedPost}/>
+                            <Route path={ROUTES.CATEGORY} component={SelectedCategory}/>
                             <Route exact path={ROUTES.HOME} component={UserPostsMain}/>
                             <Route path={ROUTES.NOT_FOUND} component={NotFoundPage}/>
                         </Switch>

@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
+import {FormControl} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -138,29 +139,30 @@ const FileUpload = ({close, ...props}) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                            <InputLabel id="categorySelect">Category</InputLabel>
-                            <Select
-                                className={classes.select}
-                                labelId="category"
-                                name="category"
-                                id="category"
-                                variant="outlined"
-                                fullWidth
-                                defaultValue={-1}
-                                onChange={handleOnChange}
-                                label="Category"
-                            >
-                                <MenuItem disabled value={-1}>
-                                    <em>Please choose a category</em>
-                                </MenuItem>
-                                {selectOptions && selectOptions.map((option, index) => {
-                                    return (
-                                        <MenuItem key={index} value={option.name}>
-                                            <em>{option.name}</em>
-                                        </MenuItem>
-                                    )
-                                })}
-                            </Select>
+                            <FormControl variant="outlined" className={classes.select}>
+                                <InputLabel id="categorySelect">Category</InputLabel>
+                                <Select
+                                    labelId="category"
+                                    name="category"
+                                    id="category"
+                                    fullWidth
+                                    defaultValue={-1}
+                                    onChange={handleOnChange}
+                                    label="Category"
+                                >
+                                    <MenuItem disabled value={-1}>
+                                        <em>Please choose a category</em>
+                                    </MenuItem>
+                                    {selectOptions && selectOptions.map((option, index) => {
+                                        return (
+                                            <MenuItem key={index} value={option.name}>
+                                                <em>{option.name}</em>
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+
                     </Grid>
                 </Grid>
                 <Button

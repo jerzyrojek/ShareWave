@@ -38,6 +38,7 @@ const FileUpload = ({close, ...props}) => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectOptions, setSelectOptions] = useState(null);
+    const [fileMetadata, setFileMetadata] = useState(false);
     const [url, setUrl] = useState(null);
     const [postDetails, setPostDetails] = useState({
         author: props.firebase.auth.currentUser.displayName,
@@ -59,18 +60,20 @@ const FileUpload = ({close, ...props}) => {
 
 
     useEffect(() => {
-        {
-            url && props.firebase.database.collection("posts").add({
+        if(url) {
+            props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
+                setFileMetadata(metadata);
+            });
+
+            console.log(fileMetadata);
+            props.firebase.database.collection("posts").add({
                 ...postDetails,
                 media: url,
-                mediaType: "",
+                mediaType: fileMetadata.contentType,
                 timestamp: new Date(),
-            });
+            })
         }
 
-        return () => {
-
-        }
     }, [url]);
 
     const handleOnChange = (e) => {
@@ -139,13 +142,12 @@ const FileUpload = ({close, ...props}) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                            <FormControl variant="outlined" className={classes.select}>
+                            <FormControl fullWidth variant="outlined" className={classes.select}>
                                 <InputLabel id="categorySelect">Category</InputLabel>
                                 <Select
                                     labelId="category"
                                     name="category"
                                     id="category"
-                                    fullWidth
                                     defaultValue={-1}
                                     onChange={handleOnChange}
                                     label="Category"

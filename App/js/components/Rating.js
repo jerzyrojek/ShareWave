@@ -11,7 +11,7 @@ const Rating = ({postId, ...props}) => {
     const postRating = props.firebase.database.collection("posts").doc(postId).collection("rating");
     const [toggle, setToggle] = useState(false);
     const [currentCountState, setCurrentCountState] = useState(0);
-    const [currentVote, setCurrentVote] = useState({});
+    const [currentVote, setCurrentVote] = useState(0);
 
     useEffect(() => {
         let mounted = true;
@@ -34,6 +34,7 @@ const Rating = ({postId, ...props}) => {
 
         return () => {
             {
+                setCurrentVote(0);
                 mounted = false;
             }
         };
@@ -51,7 +52,7 @@ const Rating = ({postId, ...props}) => {
 
         if (currentVote.state === 1) {
             postRating.doc(`${postId}:${currentUserId}`).delete().then(() => {
-                setCurrentVote({});
+                setCurrentVote(0);
             })
         }
     }
@@ -65,7 +66,7 @@ const Rating = ({postId, ...props}) => {
             });
         if (currentVote.state === -1) {
             postRating.doc(`${postId}:${currentUserId}`).delete().then(() => {
-                setCurrentVote({});
+                setCurrentVote(0);
             })
         }
     }

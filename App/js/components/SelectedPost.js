@@ -101,7 +101,11 @@ const SelectedPost = (props) => {
                                 <MoreVertIcon/>
                             </IconButton>
                         }
-                        title={selectedPostDetails.title}
+                        title={
+                            <Typography>
+                                {selectedPostDetails.title} {selectedPostDetails.category}
+                            </Typography>
+                        }
                         subheader={selectedPostDetails.timestamp.toDate().toLocaleString("pl-PL")}
                     />
                     {selectedPostDetails.media &&

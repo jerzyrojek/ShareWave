@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const CardUserPost = ({id, author, timestamp, title, text, currentRating, media, tags}) => {
+const CardUserPost = ({id, author, timestamp, title, text, category, media}) => {
     const classes = useStyles();
     const date = new Date(timestamp?.toDate());
     const history = useHistory();
@@ -58,7 +58,11 @@ const CardUserPost = ({id, author, timestamp, title, text, currentRating, media,
                                     <MoreVertIcon/>
                                 </IconButton>
                             }
-                            title={title}
+                            title={
+                                <Typography>
+                                    {title} {category}
+                                </Typography>
+                            }
                             subheader={date.toLocaleString("pl-PL")}
                 />
                 {media &&

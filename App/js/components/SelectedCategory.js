@@ -9,26 +9,34 @@ const SelectedCategory = (props) => {
     const [categoryPosts, setCategoryPosts] = useState(null);
 
     useEffect(() => {
-        if(selectedCategoryName) {
+        let mounted = true;
+        if (selectedCategoryName) {
             props.firebase.database.collection("posts")
                 .where("category", "==", `${selectedCategoryName.categoryName}`)
+                .orderBy("timestamp", "desc")
                 .get()
                 .then((querySnapshot) => {
-                    setCategoryPosts(querySnapshot.docs.map(doc => ({
-                            id: doc.id,
-                            author: doc.data().author,
-                            timestamp: doc.data().timestamp,
-                            title: doc.data().title,
-                            text: doc.data().text,
-                            rating: doc.data().rating,
-                            media: doc.data().media,
-                            mediaType: doc.data().mediaType,
-                            tags: doc.data().tags
-                        }))
-                    );
+                    if (mounted) {
+                        setCategoryPosts(querySnapshot.docs.map(doc => ({
+                                id: doc.id,
+                                author: doc.data().author,
+                                timestamp: doc.data().timestamp,
+                                title: doc.data().title,
+                                text: doc.data().text,
+                                media: doc.data().media,
+                                mediaType: doc.data().mediaType,
+                            }))
+                        );
+                    }
                 });
         }
-    }, [selectedCategoryName,categoryPosts])
+        return () => {
+            {
+                mounted = false;
+            }
+        }
+
+    }, [selectedCategoryName, categoryPosts])
 
 
     return (
@@ -48,7 +56,6 @@ const SelectedCategory = (props) => {
                                 text={post.text}
                                 media={post.media}
                                 mediaType={post.mediaType}
-                                tags={post.tags}
                             />
                         )
                     }

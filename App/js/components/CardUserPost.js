@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const CardUserPost = ({id, author, timestamp, title, text, category, media}) => {
+const CardUserPost = ({id, author, timestamp, title, text, category, media, mediaType}) => {
     const classes = useStyles();
     const date = new Date(timestamp?.toDate());
     const history = useHistory();
@@ -65,11 +65,16 @@ const CardUserPost = ({id, author, timestamp, title, text, category, media}) => 
                             }
                             subheader={date.toLocaleString("pl-PL")}
                 />
-                {media &&
+                {media && mediaType.includes("image") &&
                 <img onClick={handleSelectPost}
                      style={{cursor: "pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}}
                      alt="image"
                      src={media}/>
+                }
+                {media && mediaType.includes("video") &&
+                    <video width="100%" controls>
+                        <source src={media} type={mediaType}/>
+                    </video>
                 }
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">

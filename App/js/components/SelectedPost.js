@@ -108,10 +108,9 @@ const SelectedPost = (props) => {
                         }
                         subheader={selectedPostDetails.timestamp.toDate().toLocaleString("pl-PL")}
                     />
-                    {selectedPostDetails.media &&
+                    {selectedPostDetails.media && selectedPostDetails.mediaType.includes("image") &&
                     <img
                         style={{
-                            cursor: "pointer",
                             madWidth: "100%",
                             width: "100%",
                             height: "auto",
@@ -119,6 +118,11 @@ const SelectedPost = (props) => {
                         }}
                         alt="image"
                         src={selectedPostDetails.media}/>
+                    }
+                    {selectedPostDetails.media && selectedPostDetails.mediaType.includes("video") &&
+                    <video width="100%" controls>
+                        <source src={selectedPostDetails.media} type={selectedPostDetails.mediaType}/>
+                    </video>
                     }
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">

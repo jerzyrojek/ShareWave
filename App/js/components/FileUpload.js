@@ -44,6 +44,7 @@ const FileUpload = ({close, ...props}) => {
         author: props.firebase.auth.currentUser.displayName,
         userId: props.firebase.auth.currentUser.uid,
         timestamp: "",
+        rating: 0,
         title: "",
         text: "",
         category: "",

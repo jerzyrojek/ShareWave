@@ -17,16 +17,7 @@ const SelectedCategory = (props) => {
                 .get()
                 .then((querySnapshot) => {
                     if (mounted) {
-                        setCategoryPosts(querySnapshot.docs.map(doc => ({
-                                id: doc.id,
-                                author: doc.data().author,
-                                timestamp: doc.data().timestamp,
-                                title: doc.data().title,
-                                text: doc.data().text,
-                                media: doc.data().media,
-                                mediaType: doc.data().mediaType,
-                            }))
-                        );
+                        setCategoryPosts(querySnapshot.docs);
                     }
                 });
         }
@@ -45,17 +36,11 @@ const SelectedCategory = (props) => {
                 <Sidebar/>
             </div>
             <div className="userPosts container">
-                {categoryPosts && categoryPosts.map((post, index) => {
+                {categoryPosts && categoryPosts.map((doc, index) => {
                         return (
                             <CardUserPost
-                                id={post.id}
+                                post={doc}
                                 key={index}
-                                title={post.title}
-                                timestamp={post.timestamp}
-                                author={post.author}
-                                text={post.text}
-                                media={post.media}
-                                mediaType={post.mediaType}
                             />
                         )
                     }

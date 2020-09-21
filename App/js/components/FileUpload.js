@@ -64,8 +64,12 @@ const FileUpload = ({close, ...props}) => {
             props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
                 setFileMetadata(metadata);
             });
+        }
 
-            console.log(fileMetadata);
+    }, [url]);
+
+    useEffect(() => {
+        if(url && fileMetadata) {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 media: url,
@@ -73,8 +77,8 @@ const FileUpload = ({close, ...props}) => {
                 timestamp: new Date(),
             })
         }
+    },[fileMetadata])
 
-    }, [url]);
 
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -145,14 +149,15 @@ const FileUpload = ({close, ...props}) => {
                             <FormControl fullWidth variant="outlined" className={classes.select}>
                                 <InputLabel id="categorySelect">Category</InputLabel>
                                 <Select
+                                    required
                                     labelId="category"
                                     name="category"
                                     id="category"
-                                    defaultValue={-1}
+                                    defaultValue={""}
                                     onChange={handleOnChange}
                                     label="Category"
                                 >
-                                    <MenuItem disabled value={-1}>
+                                    <MenuItem disabled value={""}>
                                         <em>Please choose a category</em>
                                     </MenuItem>
                                     {selectOptions && selectOptions.map((option, index) => {

@@ -6,16 +6,16 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import {withFirebase} from "./Firebase/context";
 
 
-const Rating = ({postId, post, ...props}) => {
-    const currentUserId = props.firebase.auth.currentUser.uid;
-    const postRating = props.firebase.database.collection("posts").doc(postId).collection("rating");
+const Rating = ({post, ...props}) => {
+    let currentUserId = props.firebase.auth.currentUser.uid;
+    const postRating = props.firebase.database.collection("posts").doc(post.id).collection("rating");
     const [toggle, setToggle] = useState(false);
     const [currentVote, setCurrentVote] = useState(0);
 
     useEffect(() => {
         let mounted = true;
         setCurrentVote(0);
-        postRating.doc(`${postId}:${currentUserId}`).get().then((doc) => {
+        postRating.doc(`${post.id}:${currentUserId}`).get().then((doc) => {
             if (doc.exists) {
                 setCurrentVote(prevState => doc.data());
             }
@@ -46,13 +46,13 @@ const Rating = ({postId, post, ...props}) => {
     const handleClickLiked = () => {
         setToggle(prev => !prev);
         postRating
-            .doc(`${postId}:${currentUserId}`)
+            .doc(`${post.id}:${currentUserId}`)
             .set({
                 state: 1,
             });
 
         if (currentVote.state === 1) {
-            postRating.doc(`${postId}:${currentUserId}`).delete().then(() => {
+            postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                 setCurrentVote(0);
             })
         }
@@ -61,13 +61,13 @@ const Rating = ({postId, post, ...props}) => {
     const handleClickDisliked = () => {
         setToggle(prev => !prev);
         postRating
-            .doc(`${postId}:${currentUserId}`)
+            .doc(`${post.id}:${currentUserId}`)
             .set({
                 state: -1,
             });
 
         if (currentVote.state === -1) {
-            postRating.doc(`${postId}:${currentUserId}`).delete().then(() => {
+            postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                 setCurrentVote(0);
             })
         }

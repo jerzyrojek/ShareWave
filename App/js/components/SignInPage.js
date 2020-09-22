@@ -86,8 +86,14 @@ const SignInPage = (props) => {
     };
 
     const handleGoogleSignIn = () => {
-        props.firebase.signInWithPopupUsingProvider(googleProvider).then(() => {
-            history.push(ROUTES.HOME);
+        props.firebase.signInWithPopupUsingProvider(googleProvider).then((authUser) => {
+            props.firebase.database.collection("users").doc(authUser.user.uid).set({
+                username: authUser.user.displayName,
+                email: authUser.user.email,
+                role:"user"
+            }).then(() => {
+                history.push(ROUTES.HOME);
+            })
         })
     }
 

@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
 const SelectedPost = (props) => {
     const classes = useStyles();
     const {postId} = useParams();
-    const [selectedPostDetails, setSelectedPostDetails] = useState();
+    const [selectedPostDetails, setSelectedPostDetails] = useState(null);
     const [commentInput, setCommentInput] = useState({});
     const [comments, setComments] = useState(false);
 
@@ -50,7 +50,7 @@ const SelectedPost = (props) => {
         if (postId) {
             props.firebase.database.collection("posts").doc(postId)
                 .onSnapshot((snapshot => {
-                    setSelectedPostDetails(snapshot.data());
+                    setSelectedPostDetails(snapshot);
                 }))
         }
         props.firebase.database.collection("posts").doc(postId).collection("comments")
@@ -60,6 +60,7 @@ const SelectedPost = (props) => {
             }));
 
     }, []);
+
 
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -93,7 +94,7 @@ const SelectedPost = (props) => {
                     <CardHeader
                         avatar={
                             <Avatar aria-label="post" className={classes.avatar}>
-                                {selectedPostDetails.author.charAt(0)}
+                                {selectedPostDetails.data().author.charAt(0)}
                             </Avatar>
                         }
                         action={
@@ -103,12 +104,12 @@ const SelectedPost = (props) => {
                         }
                         title={
                             <Typography>
-                                {selectedPostDetails.title} {selectedPostDetails.category}
+                                {selectedPostDetails.data().title} {selectedPostDetails.data().category}
                             </Typography>
                         }
-                        subheader={selectedPostDetails.timestamp.toDate().toLocaleString("pl-PL")}
+                        subheader={selectedPostDetails.data().timestamp.toDate().toLocaleString("pl-PL")}
                     />
-                    {selectedPostDetails.media && selectedPostDetails.mediaType.includes("image") &&
+                    {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("image") &&
                     <img
                         style={{
                             madWidth: "100%",
@@ -117,23 +118,24 @@ const SelectedPost = (props) => {
                             objectFit: "contain"
                         }}
                         alt="image"
-                        src={selectedPostDetails.media}/>
+                        src={selectedPostDetails.data().media}/>
                     }
-                    {selectedPostDetails.media && selectedPostDetails.mediaType.includes("video") &&
-                    <video width="100%" controls>
-                        <source src={selectedPostDetails.media} type={selectedPostDetails.mediaType}/>
+                    {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("video") &&
+                    <video width="100%" controls loop muted>
+                        <source src={selectedPostDetails.data().media} type={selectedPostDetails.data().mediaType}/>
                     </video>
                     }
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {selectedPostDetails.text}
+                            {selectedPostDetails.data().text}
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <AuthUserContext.Consumer>
-                            {authUser => authUser ? <Rating postId={postId}/>
+                            {authUser => authUser ? <Rating post={selectedPostDetails}/>
                                 :
                                 <>
+                                    <Typography>{selectedPostDetails.data().rating}</Typography>
                                     <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
                                         <ThumbUpIcon/>
                                     </IconButton>

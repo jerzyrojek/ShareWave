@@ -71,7 +71,7 @@ const CardUserPost = ({post}) => {
                      src={post.data().media}/>
                 }
                 {post.data().media && post.data().mediaType.includes("video") &&
-                    <video width="100%" controls>
+                    <video width="100%" controls loop muted>
                         <source src={post.data().media} type={post.data().mediaType}/>
                     </video>
                 }

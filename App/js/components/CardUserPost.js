@@ -31,26 +31,25 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const CardUserPost = ({id, author, timestamp, title, text, currentRating, media, tags}) => {
+
+const CardUserPost = ({post}) => {
     const classes = useStyles();
-    const date = new Date(timestamp?.toDate());
+    const date = new Date(post.data().timestamp?.toDate());
     const history = useHistory();
 
-
     const handleSelectPost = () => {
-        if (id) {
-            history.push(`/post/${id}`);
+        if (post.id) {
+            history.push(`/post/${post.id}`);
         }
     }
 
-
     return (
         <>
-            {id && <Card className={classes.root}>
+            {post.id && <Card className={classes.root}>
                 <CardHeader onClick={handleSelectPost}
                             avatar={
                                 <Avatar aria-label="post" className={classes.avatar}>
-                                    {author.charAt(0)}
+                                    {post.data().author.charAt(0)}
                                 </Avatar>
                             }
                             action={
@@ -58,31 +57,41 @@ const CardUserPost = ({id, author, timestamp, title, text, currentRating, media,
                                     <MoreVertIcon/>
                                 </IconButton>
                             }
-                            title={title}
+                            title={
+                                <Typography>
+                                    {post.data().title} {post.data().category}
+                                </Typography>
+                            }
                             subheader={date.toLocaleString("pl-PL")}
                 />
-                {media &&
+                {post.data().media && post.data().mediaType.includes("image") &&
                 <img onClick={handleSelectPost}
                      style={{cursor: "pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}}
                      alt="image"
-                     src={media}/>
+                     src={post.data().media}/>
+                }
+                {post.data().media && post.data().mediaType.includes("video") &&
+                    <video width="100%" controls loop muted>
+                        <source src={post.data().media} type={post.data().mediaType}/>
+                    </video>
                 }
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {text}
+                        {post.data().text}
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
                     <AuthUserContext.Consumer>
                         {authUser => authUser ?
                             <>
-                                <Rating postId={id}/>
+                                <Rating post={post}/>
                                 <IconButton aria-label="comments">
                                     <CommentIcon/>
                                 </IconButton>
                             </>
                             :
                             <>
+                                <Typography>{post.data().rating}</Typography>
                                 <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
                                     <ThumbUpIcon/>
                                 </IconButton>

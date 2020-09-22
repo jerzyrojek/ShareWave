@@ -38,11 +38,13 @@ const FileUpload = ({close, ...props}) => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectOptions, setSelectOptions] = useState(null);
+    const [fileMetadata, setFileMetadata] = useState(false);
     const [url, setUrl] = useState(null);
     const [postDetails, setPostDetails] = useState({
         author: props.firebase.auth.currentUser.displayName,
         userId: props.firebase.auth.currentUser.uid,
         timestamp: "",
+        rating: 0,
         title: "",
         text: "",
         category: "",
@@ -59,19 +61,25 @@ const FileUpload = ({close, ...props}) => {
 
 
     useEffect(() => {
-        {
-            url && props.firebase.database.collection("posts").add({
-                ...postDetails,
-                media: url,
-                mediaType: "",
-                timestamp: new Date(),
+        if(url) {
+            props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
+                setFileMetadata(metadata);
             });
         }
 
-        return () => {
-
-        }
     }, [url]);
+
+    useEffect(() => {
+        if(url && fileMetadata) {
+            props.firebase.database.collection("posts").add({
+                ...postDetails,
+                media: url,
+                mediaType: fileMetadata.contentType,
+                timestamp: new Date(),
+            })
+        }
+    },[fileMetadata])
+
 
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -139,18 +147,18 @@ const FileUpload = ({close, ...props}) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                            <FormControl variant="outlined" className={classes.select}>
+                            <FormControl fullWidth variant="outlined" className={classes.select}>
                                 <InputLabel id="categorySelect">Category</InputLabel>
                                 <Select
+                                    required
                                     labelId="category"
                                     name="category"
                                     id="category"
-                                    fullWidth
-                                    defaultValue={-1}
+                                    defaultValue={""}
                                     onChange={handleOnChange}
                                     label="Category"
                                 >
-                                    <MenuItem disabled value={-1}>
+                                    <MenuItem disabled value={""}>
                                         <em>Please choose a category</em>
                                     </MenuItem>
                                     {selectOptions && selectOptions.map((option, index) => {

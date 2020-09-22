@@ -49,7 +49,7 @@ const FileUploadModal = () => {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        <FileUpload/>
+                        <FileUpload close={handleClose}/>
                     </div>
                 </Fade>
             </Modal>

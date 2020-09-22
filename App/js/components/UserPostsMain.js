@@ -4,26 +4,14 @@ import Sidebar from "./Sidebar";
 import {withFirebase} from "./Firebase/context";
 
 const UserPostsMain = (props) => {
-
     const [posts, setPosts] = useState(null);
-
 
     useEffect(() => {
         props.firebase.database.collection("posts")
-            .orderBy("timestamp", "desc")
+            .orderBy("rating", "desc")
             .onSnapshot(snapshot => (
-            setPosts(snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    author: doc.data().author,
-                    timestamp: doc.data().timestamp,
-                    title: doc.data().title,
-                    text: doc.data().text,
-                    rating: doc.data().rating,
-                    media: doc.data().media,
-                    mediaType: doc.data().mediaType,
-                    tags: doc.data().tags
-                }))
-            )));
+                setPosts(snapshot.docs)
+            ));
     }, []);
 
     return (
@@ -32,22 +20,14 @@ const UserPostsMain = (props) => {
                 <Sidebar/>
             </div>
             <div className="userPosts container">
-                {posts && posts.map((post, index) => {
+                {posts && posts.map((doc, index) => {
                         return (
                             <CardUserPost
-                                id={post.id}
+                                post={doc}
                                 key={index}
-                                title={post.title}
-                                timestamp={post.timestamp}
-                                author={post.author}
-                                text={post.text}
-                                media={post.media}
-                                mediaType={post.mediaType}
-                                tags={post.tags}
                             />
                         )
-                    }
-                )
+                    })
                 }
             </div>
         </div>

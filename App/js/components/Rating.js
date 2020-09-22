@@ -10,7 +10,6 @@ const Rating = ({postId, post, ...props}) => {
     const currentUserId = props.firebase.auth.currentUser.uid;
     const postRating = props.firebase.database.collection("posts").doc(postId).collection("rating");
     const [toggle, setToggle] = useState(false);
-    const [currentCountState, setCurrentCountState] = useState(0);
     const [currentVote, setCurrentVote] = useState(0);
 
     useEffect(() => {
@@ -32,7 +31,6 @@ const Rating = ({postId, post, ...props}) => {
                 props.firebase.database.collection("posts").doc(post.id).update({
                     rating: currentCount
                 })
-                return setCurrentCountState(currentCount);
             }
         });
 
@@ -47,9 +45,6 @@ const Rating = ({postId, post, ...props}) => {
 
     const handleClickLiked = () => {
         setToggle(prev => !prev);
-        props.firebase.database.collection("posts").doc(post.id).update({
-            rating: currentCountState
-        })
         postRating
             .doc(`${postId}:${currentUserId}`)
             .set({

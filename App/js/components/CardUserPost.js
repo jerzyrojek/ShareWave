@@ -84,13 +84,14 @@ const CardUserPost = ({post}) => {
                     <AuthUserContext.Consumer>
                         {authUser => authUser ?
                             <>
-                                <Rating postId={post.id} post={post}/>
+                                <Rating post={post}/>
                                 <IconButton aria-label="comments">
                                     <CommentIcon/>
                                 </IconButton>
                             </>
                             :
                             <>
+                                <Typography>{post.data().rating}</Typography>
                                 <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
                                     <ThumbUpIcon/>
                                 </IconButton>

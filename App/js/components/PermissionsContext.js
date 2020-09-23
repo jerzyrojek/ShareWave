@@ -9,13 +9,17 @@ const withPermissions = condition => Component => {
     const PermissionsContext = (props) => {
         const history = useHistory();
         useEffect(() => {
-            const listener = props.firebase.auth.onAuthStateChanged(
+            const listener = props.firebase.onAuthUserListener(
                 authUser => {
                     if (!condition(authUser)) {
-                        history.push(ROUTES.SIGN_IN);
+                        history.push(ROUTES.HOME);
                     }
+                },
+                () => {
+                    history.push(ROUTES.SIGN_IN);
                 }
-            )
+                );
+
             return () => {
                 listener();
             }

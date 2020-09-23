@@ -35,8 +35,8 @@ const FileUploadModal = () => {
     };
 
     return (
-        <div>
-            <button style={{outline:"none", border:"0", display:"flex", alignItems:"center", backgroundColor:"#263238", padding:"0", fontSize:"1.3rem"}} onClick={handleOpen}><AddBoxRoundedIcon/>Upload</button>
+        <>
+            <button style={{outline:"none", border:"0", display:"flex", alignItems:"center", backgroundColor:"#263238", padding:"0 1rem", fontSize:"1.3rem"}} onClick={handleOpen}><AddBoxRoundedIcon/>Upload</button>
             <Modal
                 className={classes.modal}
                 open={open}
@@ -53,7 +53,7 @@ const FileUploadModal = () => {
                     </div>
                 </Fade>
             </Modal>
-        </div>
+        </>
     );
 };
 

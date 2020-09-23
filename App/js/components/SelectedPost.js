@@ -121,7 +121,7 @@ const SelectedPost = (props) => {
                         src={selectedPostDetails.data().media}/>
                     }
                     {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("video") &&
-                    <video width="100%" controls loop muted>
+                    <video width="100%" controls autoPlay loop muted>
                         <source src={selectedPostDetails.data().media} type={selectedPostDetails.data().mediaType}/>
                     </video>
                     }

@@ -14,6 +14,8 @@ import {Switch} from "react-router-dom";
 import NotFoundPage from "./components/NotFoundPage";
 import SelectedPost from "./components/SelectedPost";
 import SelectedCategory from "./components/SelectedCategory";
+import AdminPage from "./components/AdminPage";
+import UserAccountPage from "./components/UserAccountPage";
 
 const theme = createMuiTheme({
     palette: {
@@ -30,10 +32,12 @@ const App = (props) => {
 
     const [authUser, setAuthUser] = useState(null);
     useEffect(() => {
-        const listener = props.firebase.auth.onAuthStateChanged(authUser => {
+        const listener = props.firebase.onAuthUserListener(authUser => {
             {
-                authUser ? setAuthUser(authUser) : setAuthUser(null)
+                setAuthUser(authUser);
             }
+        }, () => {
+            setAuthUser(null);
         });
 
         return () => {
@@ -41,7 +45,6 @@ const App = (props) => {
         }
 
     },[]);
-
 
     return (
         <ThemeProvider theme={theme}>
@@ -52,9 +55,9 @@ const App = (props) => {
                         <Switch>
                             <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
                             <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
-                            <Route path={ROUTES.ACCOUNT}/>
+                            <Route path={ROUTES.ACCOUNT} component={UserAccountPage}/>
                             <Route path={ROUTES.PASSWORD_FORGET}/>
-                            <Route path={ROUTES.ADMIN}/>
+                            <Route path={ROUTES.ADMIN} component={AdminPage}/>
                             <Route path={ROUTES.POST} component={SelectedPost}/>
                             <Route path={ROUTES.CATEGORY} component={SelectedCategory}/>
                             <Route exact path={ROUTES.HOME} component={UserPostsMain}/>

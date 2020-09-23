@@ -71,15 +71,20 @@ const SignUpFormBase = (props) => {
         const {username, email, passwordOne} = formInput;
         props.firebase.newUserEmailAndPassword(email, passwordOne)
             .then(authUser => {
-                props.firebase.database.collection("users").add({
+                props.firebase.database.collection("users").doc(authUser.user.uid).set({
                     username: username,
                     email: email,
-                });
-                props.firebase.auth.currentUser.updateProfile({displayName: username});
-                setFormInput({...initialState});
-                history.push(ROUTES.SIGN_IN);
-            }).catch(error => {
-            console.log(error.message);
+                    role:"user"
+                }).then(() => {
+                    props.firebase.auth.currentUser.updateProfile({displayName: username}).then(() => {
+                        setFormInput({...initialState});
+                        history.push(ROUTES.SIGN_IN);
+                    })
+                })
+            }).catch(err => {
+            setFormInput(prev => (
+                {...prev, error:err}
+            ))
         });
     }
     const handleOnChange = (e) => {
@@ -168,7 +173,7 @@ const SignUpFormBase = (props) => {
                     </Link>
                 </Grid>
             </Grid>
-            {formInput.error && <p>{formInput.error.message}</p>}
+            {formInput.error && <p style={{marginTop:"1rem", color:"red"}}>{formInput.error.message}</p>}
         </form>
     )
 }

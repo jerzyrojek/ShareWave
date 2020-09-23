@@ -49,6 +49,24 @@ class Firebase {
         return this.auth.currentUser.updatePassword(password);
     };
 
+    onAuthUserListener = (next, fallback) =>
+        this.auth.onAuthStateChanged(authUser => {
+            if (authUser) {
+                this.database.collection("users").doc(authUser.uid)
+                    .get().then(snapshot => {
+                    const databaseUser = snapshot.data();
+                    authUser = {
+                        uid: authUser.uid,
+                        email: authUser.email,
+                        ...(databaseUser)
+                    }
+                        next(authUser);
+                    });
+            } else {
+                fallback();
+            }
+        });
+
 }
 
 export default Firebase;

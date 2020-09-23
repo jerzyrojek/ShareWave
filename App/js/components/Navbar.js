@@ -31,7 +31,7 @@ const Navbar = () => {
                             </Link>
                         </div>
                         <AuthUserContext.Consumer>
-                            {authUser => authUser ? <NavbarAuthorized/> : <NavbarNonAuthorized/>}
+                            {authUser => authUser ? <NavbarAuthorized authUser={authUser}/> : <NavbarNonAuthorized/>}
                         </AuthUserContext.Consumer>
 
                     </div>
@@ -43,10 +43,13 @@ const Navbar = () => {
 };
 
 
-const NavbarAuthorized = () => {
+const NavbarAuthorized = ({authUser}) => {
     return (
         <div className="app__menu">
             <FileUploadModal/>
+            {authUser.role === "admin" &&
+            <Link to={ROUTES.ADMIN}>Admin</Link>
+            }
             <Link to={ROUTES.ACCOUNT}>Account</Link>
             <SignOut/>
         </div>

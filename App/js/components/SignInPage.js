@@ -18,7 +18,6 @@ import app from "firebase/app";
 import AlertComponent from "./Alert";
 
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
@@ -72,8 +71,9 @@ const SignInPage = (props) => {
             }).catch(err => {
             //    check why this is highlighted by Webstorm
             setSignInInfo(prevState => (
-                {...prevState,
-                error: err,
+                {
+                    ...prevState,
+                    error: err,
                 }
             ))
         });
@@ -86,7 +86,14 @@ const SignInPage = (props) => {
     };
 
     const handleGoogleSignIn = () => {
-        props.firebase.signInWithPopupUsingProvider(googleProvider).then(() => {
+        props.firebase.signInWithPopupUsingProvider(googleProvider).then((authUser) => {
+            if (authUser.additionalUserInfo.isNewUser === true) {
+                props.firebase.database.collection("users").doc(authUser.user.uid).set({
+                    username: authUser.user.displayName,
+                    email: authUser.user.email,
+                    role: "user"
+                })
+            }
             history.push(ROUTES.HOME);
         })
     }
@@ -162,7 +169,7 @@ const SignInPage = (props) => {
                     </form>
                 </div>
                 {signInInfo.error && <AlertComponent type="error" runAlert={true} message={signInInfo.error.message}/>}
-            {/*    needs to be fixed to be fired every time instead of just once*/}
+                {/*    needs to be fixed to be fired every time instead of just once*/}
             </Grid>
         </Grid>
     );

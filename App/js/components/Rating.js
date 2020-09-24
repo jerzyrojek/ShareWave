@@ -1,16 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import {withFirebase} from "./Firebase/context";
+import AuthUserContext from "./SessionContext";
 
 
 const Rating = ({post, ...props}) => {
-    let currentUserId = props.firebase.auth.currentUser.uid;
+    const authUser = useContext(AuthUserContext);
+    let currentUserId = authUser.uid
     const postRating = props.firebase.database.collection("posts").doc(post.id).collection("rating");
     const [toggle, setToggle] = useState(false);
     const [currentVote, setCurrentVote] = useState(0);
+
 
     useEffect(() => {
         let mounted = true;

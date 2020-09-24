@@ -11,6 +11,7 @@ import AddBoxRoundedIcon from "@material-ui/icons/AddBoxRounded";
 import {withFirebase} from "./Firebase/context";
 import CategoryIcon from '@material-ui/icons/Category';
 import {useHistory} from "react-router-dom";
+import AuthUserContext from "./SessionContext";
 
 const drawerWidth = 240;
 
@@ -77,10 +78,20 @@ const Sidebar = (props) => {
                 <Toolbar/>
                 <div className={classes.drawerContainer}>
                     <List>
-                        <ListItem button onClick={handleClickAddCategory}>
-                            <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
-                            <ListItemText primary="Add Category"/>
-                        </ListItem>
+                        <AuthUserContext.Consumer>
+                            {authUser => authUser && authUser.role === "admin" ?
+                            <ListItem button onClick={handleClickAddCategory}>
+                                <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+                                <ListItemText primary="Add Category"/>
+                            </ListItem>
+                            :
+                                <ListItem button>
+                                    <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+                                    <ListItemText primary="Suggest a category"/>
+                                </ListItem>
+                            }
+                        </AuthUserContext.Consumer>
+
                         <Divider/>
                         <ListItem>
                             <ListItemIcon><CategoryIcon/></ListItemIcon>

@@ -17,6 +17,7 @@ const UserAccountPage = (props) => {
         if (togglePosts) {
             props.firebase.database.collection("posts")
                 .where("userId", "==", `${currentUser.uid}`)
+                .orderBy("timestamp", "desc")
                 .get()
                 .then((querySnapshot) => {
                     if (mounted) {

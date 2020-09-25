@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {withFirebase} from "./Firebase/context";
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -8,19 +8,9 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import {FormControl} from "@material-ui/core";
+import AuthUserContext from "./SessionContext";
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: "60%",
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
     form: {
         width: '100%',
         marginTop: theme.spacing(3),
@@ -43,9 +33,11 @@ const FileUpload = ({close, ...props}) => {
     const [selectOptions, setSelectOptions] = useState(null);
     const [fileMetadata, setFileMetadata] = useState(false);
     const [url, setUrl] = useState(null);
+    const currentUser = useContext(AuthUserContext);
+
     const [postDetails, setPostDetails] = useState({
-        author: props.firebase.auth.currentUser.displayName,
-        userId: props.firebase.auth.currentUser.uid,
+        author: currentUser.username,
+        userId: currentUser.uid,
         timestamp: "",
         rating: 0,
         title: "",

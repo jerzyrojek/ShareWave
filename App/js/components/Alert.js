@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,10 +18,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const AlertComponent = ({type, message, runAlert ,...props}) => {
+const AlertComponent = ({type, message,...props}) => {
     const classes = useStyles();
-    const [open, setOpen] = useState(runAlert);
+    const [open, setOpen] = useState(null);
 
+    useEffect(() => {
+        setOpen(true);
+        return() => {
+            setOpen(false);
+        }
+    },[message])
 
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -32,7 +38,7 @@ const AlertComponent = ({type, message, runAlert ,...props}) => {
     };
     return (
         <div className={classes.root}>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={type}>
                     {message}
                 </Alert>

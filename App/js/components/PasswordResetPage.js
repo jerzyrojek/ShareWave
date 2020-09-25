@@ -24,7 +24,8 @@ const PasswordResetPage = (props) => {
     const classes = useStyles();
     const [pwResetForm, setPwResetForm] = useState({
         email:"",
-        error:""
+        error:"",
+        success:null
     });
 
 
@@ -37,9 +38,10 @@ const PasswordResetPage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setPwResetForm(prev => ({...prev, error:""}));
-        props.firebase.passwordReset(pwResetForm.email).then((res) => {
-            console.log(res);
+        setPwResetForm(prev => ({...prev, error:"", success:null}));
+        props.firebase.passwordReset(pwResetForm.email).then(() => {
+            setPwResetForm(prev => ({...prev, success: true}));
+
         }).catch((err) => {
             setPwResetForm(prev => ({
                 ...prev,
@@ -74,6 +76,7 @@ const PasswordResetPage = (props) => {
                     color="primary"
                     className={classes.submit}>Reset</Button>
                 {pwResetForm.error && <AlertComponent type="error" message={pwResetForm.error.message}/>}
+                {pwResetForm.success && <AlertComponent type="success" message="Reset email sent!"/>}
             </form>
         </div>
     );

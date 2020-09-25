@@ -65,6 +65,7 @@ const SignInPage = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const {email, password} = signInInfo;
+        setSignInInfo(prev => ({...prev, error:""}))
         props.firebase.signInEmailAndPassword(email, password)
             .then(() => {
                 setSignInInfo({...initialState});
@@ -165,8 +166,7 @@ const SignInPage = (props) => {
                         </Grid>
                     </form>
                 </div>
-                {signInInfo.error && <AlertComponent type="error" runAlert={true} message={signInInfo.error.message}/>}
-                {/*    needs to be fixed to be fired every time instead of just once*/}
+                {signInInfo.error && <AlertComponent type="error" message={signInInfo.error.message}/>}
             </Grid>
         </Grid>
     );

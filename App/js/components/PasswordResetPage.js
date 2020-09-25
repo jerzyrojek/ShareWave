@@ -37,6 +37,7 @@ const PasswordResetPage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setPwResetForm(prev => ({...prev, error:""}));
         props.firebase.passwordReset(pwResetForm.email).then((res) => {
             console.log(res);
         }).catch((err) => {

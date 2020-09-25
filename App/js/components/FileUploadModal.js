@@ -17,8 +17,17 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-        outline:"none",
+        outline: "none",
     },
+    modalButton: {
+        outline: "none",
+        border: "0",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#263238",
+        padding: "0 1rem",
+        fontSize: "1.3rem"
+    }
 }));
 
 
@@ -36,7 +45,7 @@ const FileUploadModal = () => {
 
     return (
         <>
-            <button style={{outline:"none", border:"0", display:"flex", alignItems:"center", backgroundColor:"#263238", padding:"0 1rem", fontSize:"1.3rem"}} onClick={handleOpen}><AddBoxRoundedIcon/>Upload</button>
+            <button className={classes.modalButton} onClick={handleOpen}><AddBoxRoundedIcon/>Upload</button>
             <Modal
                 className={classes.modal}
                 open={open}

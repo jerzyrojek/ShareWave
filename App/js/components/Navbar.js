@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
     },
+    toolBar: {
+        minHeight:"64px"
+    }
 }));
 
 const Navbar = () => {
@@ -21,9 +24,8 @@ const Navbar = () => {
     return (
         <>
             <AppBar className={classes.appBar} positon="sticky">
-                <Toolbar>
+                <Toolbar className={classes.toolBar}>
                     <div className="app__navbar">
-
                         <div className="app__logo">
                             <Link to={ROUTES.HOME}>
                                 <Typography variant="h5" color="secondary"><span>Share</span>Wave</Typography>
@@ -37,7 +39,7 @@ const Navbar = () => {
                     </div>
                 </Toolbar>
             </AppBar>
-            <Toolbar/>
+            <Toolbar className={classes.toolBar}/>
         </>
     )
 };

@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     select: {
         minWidth: 120,
         margin: "0.5rem 0",
+    },
+    input: {
+        padding:"8px"
     }
 }));
 
@@ -51,22 +54,34 @@ const FileUpload = ({close, ...props}) => {
     });
 
     useEffect(() => {
+        let mounted = true;
         props.firebase.database.collection("categories")
             .onSnapshot(snapshot => {
-                setSelectOptions(snapshot.docs.map(doc => ({
-                    name: doc.data().name,
-                })))
+                if(mounted) {
+                    setSelectOptions(snapshot.docs.map(doc => ({
+                        name: doc.data().name,
+                    })))
+                }
             })
+
+        return () => {
+            mounted = false;
+        }
     }, [])
 
 
     useEffect(() => {
+        let mounted = true;
         if(url) {
             props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
-                setFileMetadata(metadata);
+                if(mounted) {
+                    setFileMetadata(metadata);
+                }
             });
         }
-
+        return () => {
+            mounted = false;
+        }
     }, [url]);
 
     useEffect(() => {
@@ -76,6 +91,8 @@ const FileUpload = ({close, ...props}) => {
                 media: url,
                 mediaType: fileMetadata.contentType,
                 timestamp: new Date(),
+            }).then(() => {
+                return close();
             })
         }
     },[fileMetadata])
@@ -122,7 +139,7 @@ const FileUpload = ({close, ...props}) => {
         <div className="app__upload">
             <form onSubmit={handleUploadSubmit} className={classes.form}>
                 <Grid container spacing={2}>
-                    <input onChange={handleFileSelect} type="file"/>
+                    <input className={classes.input} onChange={handleFileSelect} type="file"/>
                     <Grid item xs={12}>
                         <TextField
                             onChange={handleOnChange}

@@ -126,13 +126,18 @@ const SelectedPost = (props) => {
                         action={
                             <AuthUserContext.Consumer>
                                 {authUser =>
-                                    authUser && authUser.uid === selectedPostDetails.data().userId
-                                    ||
-                                    authUser && authUser.role === "admin"
-                                    &&
-                                    <IconButton onClick={handleDeletePost} className={classes.close} aria-label="settings">
-                                        <ClearIcon/>
-                                    </IconButton>
+                                    (authUser && authUser.role === "admin") ?
+                                        <IconButton onClick={handleDeletePost} className={classes.close}
+                                                    aria-label="settings">
+                                            <ClearIcon/>
+                                        </IconButton>
+                                        :
+                                        (authUser && authUser.uid === selectedPostDetails.data().userId) &&
+                                        <IconButton onClick={handleDeletePost} className={classes.close}
+                                                    aria-label="settings">
+                                            <ClearIcon/>
+                                        </IconButton>
+
                                 }
                             </AuthUserContext.Consumer>
                         }

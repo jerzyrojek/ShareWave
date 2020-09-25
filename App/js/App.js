@@ -16,6 +16,7 @@ import SelectedPost from "./components/SelectedPost";
 import SelectedCategory from "./components/SelectedCategory";
 import AdminPage from "./components/AdminPage";
 import UserAccountPage from "./components/UserAccountPage";
+import PasswordResetPage from "./components/PasswordResetPage";
 
 const theme = createMuiTheme({
     palette: {
@@ -56,7 +57,7 @@ const App = (props) => {
                             <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
                             <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
                             <Route path={ROUTES.ACCOUNT} component={UserAccountPage}/>
-                            <Route path={ROUTES.PASSWORD_FORGET}/>
+                            <Route path={ROUTES.PASSWORD_FORGET} component={PasswordResetPage}/>
                             <Route path={ROUTES.ADMIN} component={AdminPage}/>
                             <Route path={ROUTES.POST} component={SelectedPost}/>
                             <Route path={ROUTES.CATEGORY} component={SelectedCategory}/>

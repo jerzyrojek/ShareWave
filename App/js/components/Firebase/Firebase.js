@@ -45,8 +45,26 @@ class Firebase {
         return this.auth.sendPasswordResetEmail(email);
     };
 
-    updateUserPassword = (password) => {
-        return this.auth.currentUser.updatePassword(password);
+    reauthenticate = (currentPassword) => {
+        const currentUser = this.auth.currentUser;
+        const cred = this.auth.EmailAuthProvider.credential(
+            currentUser.email, currentPassword);
+        return currentUser.reauthenticateWithCredential(cred);
+    }
+
+    //fix
+
+    updateUserPassword = (currentPassword, newPassword) => {
+        const passwordProvidedByUser = prompt("Current password")
+        this.reauthenticate(passwordProvidedByUser).then(() => {
+            this.auth.currentUser.updatePassword(newPassword).then(() => {
+                console.log("Updated!")
+            }).catch(err => {
+                console.log(err);
+            })
+        }).catch(err => {
+            console.log(err)
+        })
     };
 
     onAuthUserListener = (next, fallback) =>

@@ -47,17 +47,17 @@ class Firebase {
 
     reauthenticate = (currentPassword) => {
         const currentUser = this.auth.currentUser;
-        const cred = this.auth.EmailAuthProvider.credential(
+        const cred = app.auth.EmailAuthProvider.credential(
             currentUser.email, currentPassword);
         return currentUser.reauthenticateWithCredential(cred);
     }
 
-    //fix
 
     updateUserPassword = (currentPassword, newPassword) => {
-        const passwordProvidedByUser = prompt("Current password")
+        const passwordProvidedByUser = prompt("Current password");
+        const newPasswordProvidedByUser = prompt("New password");
         this.reauthenticate(passwordProvidedByUser).then(() => {
-            this.auth.currentUser.updatePassword(newPassword).then(() => {
+            this.auth.currentUser.updatePassword(newPasswordProvidedByUser).then(() => {
                 console.log("Updated!")
             }).catch(err => {
                 console.log(err);

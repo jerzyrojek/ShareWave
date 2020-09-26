@@ -5,12 +5,12 @@ import AuthUserContext from "./SessionContext";
 import Button from "@material-ui/core/Button";
 import Sidebar from "./Sidebar";
 import CardUserPost from "./CardUserPost";
+import {withFirebase} from "./Firebase/context";
 
 const UserAccountPage = (props) => {
     const [togglePosts, setTogglePosts] = useState(false);
     const [posts, setPosts] = useState(null);
     const currentUser = useContext(AuthUserContext);
-
 
     useEffect(() => {
         let mounted = true;
@@ -47,7 +47,7 @@ const UserAccountPage = (props) => {
                             <Typography variant="h3">User Page</Typography>
                             <Typography variant="h5">Display name: {authUser.username}</Typography>
                             <Typography variant="h5">Email: {authUser.email}</Typography>
-                            <Button color="secondary" variant="contained">Change Password</Button>
+                            <Button color="secondary" onClick={props.firebase.updateUserPassword} variant="contained">Change Password</Button>
                             <Button color="secondary" variant="contained" onClick={showPosts}>Show my posts</Button>
                         </div>
                         <div className="user__posts">
@@ -64,4 +64,4 @@ const UserAccountPage = (props) => {
 
 const condition = authUSer => !!authUSer;
 
-export default PermissionsContext(condition)(UserAccountPage);
+export default PermissionsContext(condition)(withFirebase(UserAccountPage));

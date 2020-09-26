@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Sidebar from "./Sidebar";
 import CardUserPost from "./CardUserPost";
 import {withFirebase} from "./Firebase/context";
+import PasswordChangeModal from "./PasswordChangeModal";
 
 const UserAccountPage = (props) => {
     const [togglePosts, setTogglePosts] = useState(false);
@@ -47,7 +48,7 @@ const UserAccountPage = (props) => {
                             <Typography variant="h3">User Page</Typography>
                             <Typography variant="h5">Display name: {authUser.username}</Typography>
                             <Typography variant="h5">Email: {authUser.email}</Typography>
-                            <Button color="secondary" onClick={props.firebase.updateUserPassword} variant="contained">Change Password</Button>
+                            <PasswordChangeModal/>
                             <Button color="secondary" variant="contained" onClick={showPosts}>Show my posts</Button>
                         </div>
                         <div className="user__posts">

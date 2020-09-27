@@ -58,20 +58,23 @@ const SignInPage = (props) => {
     const initialState = {
         email: "",
         password: "",
-        error: ""
+        error: "",
+        success:false
     }
     const [signInInfo, setSignInInfo] = useState({...initialState});
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const {email, password} = signInInfo;
-        setSignInInfo(prev => ({...prev, error:""}))
+        setSignInInfo(prev => ({...prev, error:"", success: false}))
         props.firebase.signInEmailAndPassword(email, password)
             .then(() => {
-                setSignInInfo({...initialState});
-                history.push(ROUTES.HOME);
+                setSignInInfo(prev => ({...prev,success:true}))
+                setTimeout(() => {
+                    setSignInInfo({...initialState});
+                    history.push(ROUTES.HOME);
+                },2000)
             }).catch(err => {
-            //    check why this is highlighted by Webstorm
             setSignInInfo(prevState => (
                 {
                     ...prevState,
@@ -88,15 +91,36 @@ const SignInPage = (props) => {
     };
 
     const handleGoogleSignIn = () => {
+        setSignInInfo(prev => ({...prev, error:"", success: false}))
         props.firebase.signInWithPopupUsingProvider(googleProvider).then((authUser) => {
             if (authUser.additionalUserInfo.isNewUser === true) {
                 props.firebase.database.collection("users").doc(authUser.user.uid).set({
                     username: authUser.user.displayName,
                     email: authUser.user.email,
                     role: "user"
+                }).catch(err => {
+                    setSignInInfo(prevState => (
+                        {
+                            ...prevState,
+                            success:false,
+                            error: err,
+                        }
+                    ))
                 })
             }
-            history.push(ROUTES.HOME);
+        }).then(() => {
+            setSignInInfo(prev => ({...prev,success:true}))
+            setTimeout(() => {
+                history.push(ROUTES.HOME);
+            },2000)
+        }).catch(err => {
+            setSignInInfo(prevState => (
+                {
+                    ...prevState,
+                    success:false,
+                    error: err,
+                }
+            ))
         })
     }
 
@@ -167,6 +191,7 @@ const SignInPage = (props) => {
                     </form>
                 </div>
                 {signInInfo.error && <AlertComponent type="error" message={signInInfo.error.message}/>}
+                {signInInfo.success && <AlertComponent type="success" message="Signed in! Redirecting..."/>}
             </Grid>
         </Grid>
     );

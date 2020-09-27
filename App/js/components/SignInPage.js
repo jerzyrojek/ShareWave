@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +18,7 @@ import AlertComponent from "./Alert";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100vh',
+        height: 'calc(100vh - 64px)',
     },
     image: {
         backgroundImage: 'url(https://source.unsplash.com/featured/?video%20games)',
@@ -44,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
+    routes: {
+      marginTop:"1rem"
+    },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
@@ -57,19 +58,23 @@ const SignInPage = (props) => {
     const initialState = {
         email: "",
         password: "",
-        error: ""
+        error: "",
+        success:false
     }
     const [signInInfo, setSignInInfo] = useState({...initialState});
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const {email, password} = signInInfo;
+        setSignInInfo(prev => ({...prev, error:"", success: false}))
         props.firebase.signInEmailAndPassword(email, password)
             .then(() => {
-                setSignInInfo({...initialState});
-                history.push(ROUTES.HOME);
+                setSignInInfo(prev => ({...prev,success:true}))
+                setTimeout(() => {
+                    setSignInInfo({...initialState});
+                    history.push(ROUTES.HOME);
+                },2000)
             }).catch(err => {
-            //    check why this is highlighted by Webstorm
             setSignInInfo(prevState => (
                 {
                     ...prevState,
@@ -86,15 +91,36 @@ const SignInPage = (props) => {
     };
 
     const handleGoogleSignIn = () => {
+        setSignInInfo(prev => ({...prev, error:"", success: false}))
         props.firebase.signInWithPopupUsingProvider(googleProvider).then((authUser) => {
             if (authUser.additionalUserInfo.isNewUser === true) {
                 props.firebase.database.collection("users").doc(authUser.user.uid).set({
                     username: authUser.user.displayName,
                     email: authUser.user.email,
                     role: "user"
+                }).catch(err => {
+                    setSignInInfo(prevState => (
+                        {
+                            ...prevState,
+                            success:false,
+                            error: err,
+                        }
+                    ))
                 })
             }
-            history.push(ROUTES.HOME);
+        }).then(() => {
+            setSignInInfo(prev => ({...prev,success:true}))
+            setTimeout(() => {
+                history.push(ROUTES.HOME);
+            },2000)
+        }).catch(err => {
+            setSignInInfo(prevState => (
+                {
+                    ...prevState,
+                    success:false,
+                    error: err,
+                }
+            ))
         })
     }
 
@@ -137,10 +163,6 @@ const SignInPage = (props) => {
                             type="password"
                             id="password"
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary"/>}
-                            label="Remember me"
-                        />
                         <Button
                             disabled={isInvalid}
                             type="submit"
@@ -154,7 +176,7 @@ const SignInPage = (props) => {
                         <Button onClick={handleGoogleSignIn} color="secondary" fullWidth variant="contained">
                             Google
                         </Button>
-                        <Grid container>
+                        <Grid className={classes.routes} container>
                             <Grid item xs>
                                 <Link href={ROUTES.PASSWORD_FORGET} variant="body2">
                                     Forgot password?
@@ -168,8 +190,8 @@ const SignInPage = (props) => {
                         </Grid>
                     </form>
                 </div>
-                {signInInfo.error && <AlertComponent type="error" runAlert={true} message={signInInfo.error.message}/>}
-                {/*    needs to be fixed to be fired every time instead of just once*/}
+                {signInInfo.error && <AlertComponent type="error" message={signInInfo.error.message}/>}
+                {signInInfo.success && <AlertComponent type="success" message="Signed in! Redirecting..."/>}
             </Grid>
         </Grid>
     );

@@ -7,11 +7,20 @@ const UserPostsMain = (props) => {
     const [posts, setPosts] = useState(null);
 
     useEffect(() => {
+        let mounted = true;
         props.firebase.database.collection("posts")
             .orderBy("rating", "desc")
-            .onSnapshot(snapshot => (
-                setPosts(snapshot.docs)
-            ));
+            .onSnapshot(snapshot => {
+                    if (mounted) {
+                        setPosts(snapshot.docs)
+
+                    }
+                }
+            )
+
+        return () => {
+            mounted = false;
+        }
     }, []);
 
     return (
@@ -21,13 +30,13 @@ const UserPostsMain = (props) => {
             </div>
             <div className="userPosts container">
                 {posts && posts.map((doc, index) => {
-                        return (
-                            <CardUserPost
-                                post={doc}
-                                key={index}
-                            />
-                        )
-                    })
+                    return (
+                        <CardUserPost
+                            post={doc}
+                            key={index}
+                        />
+                    )
+                })
                 }
             </div>
         </div>

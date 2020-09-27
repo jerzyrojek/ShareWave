@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PermissionsContext from "./PermissionsContext";
 import {Typography} from "@material-ui/core";
+import Sidebar from "./Sidebar";
 
 const AdminPage = (props) => {
 
@@ -9,7 +10,7 @@ const AdminPage = (props) => {
     useEffect(() => {
         let mounted = true;
         props.firebase.database.collection("users").onSnapshot(snapshot => {
-            if(mounted) {
+            if (mounted) {
                 setUsers(snapshot.docs);
             }
         })
@@ -17,19 +18,26 @@ const AdminPage = (props) => {
         return () => {
             mounted = false;
         }
-    },[]);
+    }, []);
 
     return (
-        <div className="admin__page container">
-            <Typography variant="h3">Admin Page</Typography>
-            <Typography variant="h5">Hello there Admin</Typography>
+        <>
+            <Sidebar/>
+            <div className="admin__page container">
+                <Typography variant="h3">Admin Page</Typography>
+                <Typography variant="h5">Hello there Admin</Typography>
 
-            <ul>
-                {users && users.map((user, index) => {
-                    return <li key={index}>{user.data().username} {user.data().email} {user.id}</li>
-                })}
-            </ul>
-        </div>
+                    <Typography variant="h6">List of users</Typography>
+                    <ul>
+                        {users && users.map((user, index) => {
+                            return <li key={index}>{user.data().username} {user.data().email} {user.id}</li>
+                        })}
+                    </ul>
+                <div>
+                    <Typography variant="h6">Suggested categories</Typography>
+                </div>
+            </div>
+        </>
     );
 };
 

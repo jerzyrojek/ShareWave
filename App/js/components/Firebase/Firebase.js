@@ -45,9 +45,6 @@ class Firebase {
         return this.auth.sendPasswordResetEmail(email);
     };
 
-    updateUserPassword = (password) => {
-        return this.auth.currentUser.updatePassword(password);
-    };
 
     onAuthUserListener = (next, fallback) =>
         this.auth.onAuthStateChanged(authUser => {

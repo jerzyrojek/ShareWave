@@ -7,7 +7,6 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
@@ -23,6 +22,8 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import * as ROUTES from "../constants/routes";
 import Sidebar from "./Sidebar";
+import ClearIcon from "@material-ui/icons/Clear";
+import {useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles(() => ({
@@ -35,8 +36,11 @@ const useStyles = makeStyles(() => ({
         paddingTop: '60%',
     },
     avatar: {
-        backgroundColor: red[500],
+        backgroundColor: "#2196f3",
     },
+    close: {
+        color:red[700],
+    }
 }));
 
 const SelectedPost = (props) => {
@@ -45,19 +49,30 @@ const SelectedPost = (props) => {
     const [selectedPostDetails, setSelectedPostDetails] = useState(null);
     const [commentInput, setCommentInput] = useState({});
     const [comments, setComments] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
+        let mounted = true;
         if (postId) {
             props.firebase.database.collection("posts").doc(postId)
                 .onSnapshot((snapshot => {
-                    setSelectedPostDetails(snapshot);
+                    if(mounted){
+                        setSelectedPostDetails(snapshot);
+                    }
+
                 }))
         }
         props.firebase.database.collection("posts").doc(postId).collection("comments")
             .orderBy("timestamp", "desc")
             .onSnapshot((snapshot => {
-                setComments(prev => snapshot.docs.map(doc => doc.data()))
+                if(mounted){
+                    setComments(prev => snapshot.docs.map(doc => doc.data()))
+                }
             }));
+
+        return () => {
+            mounted = false;
+        }
 
     }, []);
 
@@ -69,6 +84,17 @@ const SelectedPost = (props) => {
         });
     }
 
+    const handleDeletePost = () => {
+        const confirmation = confirm("Are you sure you want to delete this post?");
+        if(confirmation === true) {
+            props.firebase.database.collection("posts").doc(selectedPostDetails.id).delete().then(() => {
+                console.log("deleted!")
+            }).catch(err => {
+                console.log(err);
+            })
+            history.push(ROUTES.HOME)
+        }
+    }
 
     const handleCommentSubmit = (e) => {
         e.preventDefault();
@@ -98,12 +124,25 @@ const SelectedPost = (props) => {
                             </Avatar>
                         }
                         action={
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon/>
-                            </IconButton>
+                            <AuthUserContext.Consumer>
+                                {authUser =>
+                                    (authUser && authUser.role === "admin") ?
+                                        <IconButton onClick={handleDeletePost} className={classes.close}
+                                                    aria-label="settings">
+                                            <ClearIcon/>
+                                        </IconButton>
+                                        :
+                                        (authUser && authUser.uid === selectedPostDetails.data().userId) &&
+                                        <IconButton onClick={handleDeletePost} className={classes.close}
+                                                    aria-label="settings">
+                                            <ClearIcon/>
+                                        </IconButton>
+
+                                }
+                            </AuthUserContext.Consumer>
                         }
                         title={
-                            <Typography>
+                            <Typography variant="h5">
                                 {selectedPostDetails.data().title} {selectedPostDetails.data().category}
                             </Typography>
                         }

@@ -3,8 +3,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import AddBoxRoundedIcon from "@material-ui/icons/AddBoxRounded";
-import FileUpload from "./FileUpload";
+import Button from "@material-ui/core/Button";
+import PasswordChangeForm from "./PasswordChangeForm";
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -19,19 +19,10 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
         outline: "none",
     },
-    modalButton: {
-        outline: "none",
-        border: "0",
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: "#263238",
-        padding: "0 1rem",
-        fontSize: "1.3rem"
-    }
 }));
 
 
-const FileUploadModal = () => {
+const PasswordChangeModal = () => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -45,7 +36,7 @@ const FileUploadModal = () => {
 
     return (
         <>
-            <button className={classes.modalButton} onClick={handleOpen}><AddBoxRoundedIcon/>Upload</button>
+            <Button onClick={handleOpen} color="secondary" variant="contained">Change Password</Button>
             <Modal
                 className={classes.modal}
                 open={open}
@@ -58,7 +49,7 @@ const FileUploadModal = () => {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        <FileUpload close={handleClose}/>
+                        <PasswordChangeForm close={handleClose}/>
                     </div>
                 </Fade>
             </Modal>
@@ -66,4 +57,4 @@ const FileUploadModal = () => {
     );
 };
 
-export default FileUploadModal;
+export default PasswordChangeModal;

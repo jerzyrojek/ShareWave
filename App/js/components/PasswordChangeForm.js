@@ -4,12 +4,13 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {withFirebase} from "./Firebase/context";
 
-const PasswordChangeForm = () => {
+const PasswordChangeForm = (props) => {
 
     const [passwords, setPasswords] = useState({
-        passwordOne:"",
+        currentPassword:"",
         newPasswordOne:"",
         newPasswordTwo:"",
+        error:""
     })
 
     const handleOnChange = (e) => {
@@ -21,9 +22,13 @@ const PasswordChangeForm = () => {
 
     const handlePasswordChangeSubmit = (e) => {
         e.preventDefault();
-        console.log("Sent!");
-
-        //props.firebase.updateUserPassword
+        props.firebase.updateUserPassword(passwords.currentPassword, passwords.newPasswordOne);
+        setPasswords({
+            currentPassword:"",
+            newPasswordOne:"",
+            newPasswordTwo:"",
+            error:""
+        })
     }
 
     return (
@@ -32,8 +37,11 @@ const PasswordChangeForm = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
+                            onChange={handleOnChange}
+                            type="password"
                             name="currentPassword"
                             variant="outlined"
+                            value={passwords.currentPassword}
                             required
                             fullWidth
                             id="currentPassword"
@@ -42,7 +50,10 @@ const PasswordChangeForm = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
+                            onChange={handleOnChange}
+                            type="password"
                             variant="outlined"
+                            value={passwords.newPasswordOne}
                             fullWidth
                             required
                             id="newPasswordOne"
@@ -52,7 +63,10 @@ const PasswordChangeForm = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
+                            onChange={handleOnChange}
                             variant="outlined"
+                            type="password"
+                            value={passwords.newPasswordTwo}
                             fullWidth
                             required
                             id="newPasswordTwo"

@@ -58,7 +58,7 @@ const PasswordChangeModal = () => {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        <PasswordChangeForm/>
+                        <PasswordChangeForm close={handleClose}/>
                     </div>
                 </Fade>
             </Modal>

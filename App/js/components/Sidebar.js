@@ -67,6 +67,7 @@ const Sidebar = (props) => {
         }
     }
 
+
     return (
         <div className={classes.root}>
             <Drawer
@@ -82,7 +83,7 @@ const Sidebar = (props) => {
                             {authUser => authUser && authUser.role === "admin" ?
                             <ListItem button onClick={handleClickAddCategory}>
                                 <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
-                                <ListItemText primary="Add Category"/>
+                                <ListItemText primary="Add a Category"/>
                             </ListItem>
                             :
                                 <ListItem button>
@@ -100,8 +101,6 @@ const Sidebar = (props) => {
                         <Divider/>
                         {categories && categories.map((category, index) => {
                             return <ListItem button key={index} onClick={() => handleSelectCategory(category)}>
-                                {/*<ListItemIcon></ListItemIcon>*/}
-                                {/*need to figure out if I want icons here or not*/}
                                 <ListItemText primary={category.name}/>
                             </ListItem>
                         })

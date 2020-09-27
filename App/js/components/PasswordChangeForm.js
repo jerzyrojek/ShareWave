@@ -4,6 +4,9 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {withFirebase} from "./Firebase/context";
 import {makeStyles} from "@material-ui/core/styles";
+import app from "firebase/app";
+import AlertComponent from "./Alert";
+
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -15,15 +18,51 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const PasswordChangeForm = (props) => {
+const PasswordChangeForm = ({close, ...props}) => {
     const classes = useStyles();
 
     const [passwords, setPasswords] = useState({
-        currentPassword:"",
-        newPasswordOne:"",
-        newPasswordTwo:"",
-        error:""
-    })
+        currentPassword: "",
+        newPasswordOne: "",
+        newPasswordTwo: "",
+        error: "",
+        success: false
+    });
+
+
+    const reauthenticate = (currentPassword) => {
+        const currentUser = props.firebase.auth.currentUser;
+        const cred = app.auth.EmailAuthProvider.credential(
+            currentUser.email, currentPassword);
+        return currentUser.reauthenticateWithCredential(cred);
+    }
+
+
+    const updateUserPassword = (currentPassword, newPassword) => {
+        reauthenticate(currentPassword).then(() => {
+            props.firebase.auth.currentUser.updatePassword(newPassword).then(() => {
+                setPasswords({
+                    currentPassword: "",
+                    newPasswordOne: "",
+                    newPasswordTwo: "",
+                    error: "",
+                    success: true
+                })
+            }).then(() => {
+                setTimeout(() => {
+                    close();
+                }, 2000)
+            })
+        }).catch(err => {
+            setPasswords({
+                currentPassword: "",
+                newPasswordOne: "",
+                newPasswordTwo: "",
+                error: err,
+                success: false
+            })
+        })
+    };
 
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -34,13 +73,12 @@ const PasswordChangeForm = (props) => {
 
     const handlePasswordChangeSubmit = (e) => {
         e.preventDefault();
-        props.firebase.updateUserPassword(passwords.currentPassword, passwords.newPasswordOne);
-        setPasswords({
-            currentPassword:"",
-            newPasswordOne:"",
-            newPasswordTwo:"",
-            error:""
-        })
+        setPasswords(prev => ({
+            ...prev,
+            error:"",
+            success: false
+        }));
+        updateUserPassword(passwords.currentPassword, passwords.newPasswordOne);
     }
 
     return (
@@ -93,6 +131,8 @@ const PasswordChangeForm = (props) => {
                     fullWidth
                     variant="contained"
                     color="primary">Change</Button>
+                {passwords.success && <AlertComponent type="success" message={"Password changed!"}/>}
+                {passwords.error && <AlertComponent type="error" message={passwords.error.message}/>}
             </form>
         </>
     );

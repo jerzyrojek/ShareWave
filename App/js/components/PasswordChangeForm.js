@@ -3,8 +3,20 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {withFirebase} from "./Firebase/context";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+    form: {
+        width: '100%',
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
 
 const PasswordChangeForm = (props) => {
+    const classes = useStyles();
 
     const [passwords, setPasswords] = useState({
         currentPassword:"",
@@ -33,7 +45,7 @@ const PasswordChangeForm = (props) => {
 
     return (
         <>
-            <form onSubmit={handlePasswordChangeSubmit}>
+            <form className={classes.form} onSubmit={handlePasswordChangeSubmit}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -76,6 +88,7 @@ const PasswordChangeForm = (props) => {
                     </Grid>
                 </Grid>
                 <Button
+                    className={classes.submit}
                     type="submit"
                     fullWidth
                     variant="contained"

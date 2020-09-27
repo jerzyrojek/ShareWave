@@ -142,7 +142,7 @@ const SelectedPost = (props) => {
                             </AuthUserContext.Consumer>
                         }
                         title={
-                            <Typography>
+                            <Typography variant="h5">
                                 {selectedPostDetails.data().title} {selectedPostDetails.data().category}
                             </Typography>
                         }

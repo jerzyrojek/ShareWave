@@ -19,15 +19,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
         outline: "none",
     },
-    modalButton: {
-        outline: "none",
-        border: "0",
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: "#263238",
-        padding: "0 1rem",
-        fontSize: "1.3rem"
-    }
 }));
 
 

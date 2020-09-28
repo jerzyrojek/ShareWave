@@ -1,0 +1,86 @@
+import React, {useState} from 'react';
+import {withFirebase} from "./context";
+import {makeStyles} from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles((theme) => ({
+    form: {
+        width: '100%',
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
+
+const CategorySuggestionForm = ({close, ...props}) => {
+    const classes = useStyles();
+    const [categoryInfo, setCategoryInfo] = useState({
+        categoryName:"",
+        description:"",
+        error:"",
+        success:false,
+    })
+
+
+    const handleOnChange = (e) => {
+        const {name, value} = e.target;
+        setCategoryInfo((prev) => {
+            return {...prev, [name]: value}
+        });
+    }
+
+    const handleCategorySubmit = (e) => {
+        e.preventDefault();
+        console.log("lol")
+        setCategoryInfo(prev => ({
+            ...prev,
+            error:"",
+            success: false
+        }));
+    }
+
+    return (
+        <form className={classes.form} onSubmit={handleCategorySubmit}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <TextField
+                        onChange={handleOnChange}
+                        type="text"
+                        name="categoryName"
+                        variant="outlined"
+                        value={categoryInfo.categoryName}
+                        required
+                        fullWidth
+                        id="categoryName"
+                        label="Category name"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        onChange={handleOnChange}
+                        variant="outlined"
+                        value={categoryInfo.description}
+                        fullWidth
+                        id="description"
+                        label="Description (Optional)"
+                        name="description"
+                        multiline={true}
+                        rowsMax="7"
+                        inputProps={{maxLength: 500}}
+                    />
+                </Grid>
+            </Grid>
+            <Button
+                className={classes.submit}
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary">Submit suggestion</Button>
+        </form>
+    );
+};
+
+export default withFirebase(CategorySuggestionForm);

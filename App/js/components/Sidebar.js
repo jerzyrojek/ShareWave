@@ -12,6 +12,7 @@ import {withFirebase} from "./Firebase/context";
 import CategoryIcon from '@material-ui/icons/Category';
 import {useHistory} from "react-router-dom";
 import AuthUserContext from "./SessionContext";
+import CategorySuggestionModal from "./CategorySuggestionModal";
 
 const drawerWidth = 240;
 
@@ -86,10 +87,7 @@ const Sidebar = (props) => {
                                 <ListItemText primary="Add a Category"/>
                             </ListItem>
                             :
-                                <ListItem button>
-                                    <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
-                                    <ListItemText primary="Suggest a category"/>
-                                </ListItem>
+                                <CategorySuggestionModal/>
                             }
                         </AuthUserContext.Consumer>
 

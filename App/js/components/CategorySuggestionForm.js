@@ -42,6 +42,7 @@ const CategorySuggestionForm = ({close, ...props}) => {
         props.firebase.database.collection("suggested").add({
             name:categoryInfo.categoryName,
             description:categoryInfo.description,
+            timestamp: new Date(),
         }).then(() => {
             console.log("Dodane!")
         }).catch((err) => {

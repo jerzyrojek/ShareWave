@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import CategorySuggestionForm from "./Firebase/CategorySuggestionForm";
+import CategorySuggestionForm from "./CategorySuggestionForm";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import AddBoxRoundedIcon from "@material-ui/icons/AddBoxRounded";
 import ListItemText from "@material-ui/core/ListItemText";

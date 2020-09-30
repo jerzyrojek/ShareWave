@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {withFirebase} from "./context";
+import {withFirebase} from "./Firebase/context";
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -31,15 +31,25 @@ const CategorySuggestionForm = ({close, ...props}) => {
             return {...prev, [name]: value}
         });
     }
-
     const handleCategorySubmit = (e) => {
         e.preventDefault();
-        console.log("lol")
         setCategoryInfo(prev => ({
             ...prev,
             error:"",
             success: false
         }));
+
+        props.firebase.database.collection("suggested").add({
+            name:categoryInfo.categoryName,
+            description:categoryInfo.description,
+        }).then(() => {
+            console.log("Dodane!")
+        }).catch((err) => {
+            setCategoryInfo(prev => ({
+                ...prev,
+                error:err,
+            }))
+        })
     }
 
     return (

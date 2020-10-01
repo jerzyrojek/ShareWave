@@ -22,5 +22,17 @@ The main features are:
 - SCSS
 
 ## Installation
+After cloning the repository, copy the keys from .env.example into .env
 
-Currently no way to launch locally due to hidden API values. Project will be hosted when finished.
+Then create a firebase project and provide your values to appropriate keys
+
+Install locally
+```sh
+npm install
+```
+then start it
+
+```sh
+npm start
+```
+After starting available at http://localhost:3001

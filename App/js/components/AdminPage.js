@@ -29,6 +29,26 @@ const AdminPage = (props) => {
         }
     }, []);
 
+    const handleDeleteSuggested = (docId) => {
+        props.firebase.database.collection("suggested").doc(docId)
+            .delete()
+            .then(() => {
+                console.log("deleted!")
+            })
+    }
+
+    const handleAddSuggested = (docId, categoryName) => {
+        props.firebase.database.collection("categories").doc(categoryName).set({
+            name:categoryName,
+        }).then(() => {
+            props.firebase.database.collection("suggested").doc(docId)
+                .delete()
+                .then(() => {
+                    console.log("deleted!")
+                })
+        })
+    }
+
     return (
         <>
             <Sidebar/>
@@ -50,8 +70,8 @@ const AdminPage = (props) => {
                                 <Typography variant="h6">{category.data().name}</Typography>
                                 <p>{category.data().description}</p>
                                 <div className="suggestedCategories__controls">
-                                    <button>Add</button>
-                                    <button>Delete</button>
+                                    <button onClick={() => handleAddSuggested(category.id, category.data().name)}>Add</button>
+                                    <button onClick={() => handleDeleteSuggested(category.id)}>Delete</button>
                                 </div>
 
                             </div>

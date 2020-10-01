@@ -27,8 +27,9 @@ const SelectedCategory = (props) => {
             }
         }
 
-    }, [selectedCategoryName, categoryPosts])
+    }, [selectedCategoryName]);
 
+    //needs a fix to update posts on change but not loop
 
     return (
         <div className="app__body">

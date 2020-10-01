@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import * as ROUTES from "../constants/routes";
 import {withFirebase} from "./Firebase/context";
 import {useHistory} from "react-router-dom";
+import AlertComponent from "./Alert";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -68,12 +69,15 @@ const SignUpFormBase = (props) => {
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
+        setFormInput(prev => (
+            {...prev, error:""}));
         const {username, email, passwordOne} = formInput;
         props.firebase.newUserEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 props.firebase.database.collection("users").doc(authUser.user.uid).set({
                     username: username,
                     email: email,
+                    creationDate: new Date(),
                     role:"user"
                 }).then(() => {
                     props.firebase.auth.currentUser.updateProfile({displayName: username}).then(() => {
@@ -173,7 +177,7 @@ const SignUpFormBase = (props) => {
                     </Link>
                 </Grid>
             </Grid>
-            {formInput.error && <p style={{marginTop:"1rem", color:"red"}}>{formInput.error.message}</p>}
+            {formInput.error && <AlertComponent type="error" message={formInput.error.message}/>}
         </form>
     )
 }

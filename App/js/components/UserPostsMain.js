@@ -21,7 +21,7 @@ const UserPostsMain = (props) => {
         return () => {
             mounted = false;
         }
-    }, []);
+    },[]);
 
     return (
         <div className="app__body">

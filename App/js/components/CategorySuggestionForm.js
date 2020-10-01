@@ -4,6 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import AlertComponent from "./Alert";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -44,7 +45,10 @@ const CategorySuggestionForm = ({close, ...props}) => {
             description:categoryInfo.description,
             timestamp: new Date(),
         }).then(() => {
-            console.log("Dodane!")
+            setCategoryInfo(prev => ({...prev, success: true}))
+            setTimeout(() => {
+                close();
+            },2000)
         }).catch((err) => {
             setCategoryInfo(prev => ({
                 ...prev,
@@ -90,6 +94,8 @@ const CategorySuggestionForm = ({close, ...props}) => {
                 fullWidth
                 variant="contained"
                 color="primary">Submit suggestion</Button>
+            {categoryInfo.success && <AlertComponent type="success" message="Suggestion successfully submitted!"/>}
+            {categoryInfo.error && <AlertComponent type="error" message={categoryInfo.error.message}/>}
         </form>
     );
 };

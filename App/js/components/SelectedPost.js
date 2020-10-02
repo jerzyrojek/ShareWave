@@ -29,11 +29,23 @@ import {useHistory} from "react-router-dom";
 const useStyles = makeStyles(() => ({
     root: {
         width: "600px",
-        margin: "1rem auto"
+        margin: "1rem auto",
+        padding:"0.5rem",
+        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
+
     },
     media: {
+        maxWidth: "100%",
         height: "auto",
-        paddingTop: '60%',
+    },
+    image:{
+        width: "100%",
+        objectFit: "contain",
+        cursor: "pointer"
+    },
+    video:{
+        outline:"none",
+        width: "100%",
     },
     avatar: {
         backgroundColor: "#2196f3",
@@ -142,25 +154,22 @@ const SelectedPost = (props) => {
                             </AuthUserContext.Consumer>
                         }
                         title={
+                            <>
                             <Typography variant="h5">
-                                {selectedPostDetails.data().title} {selectedPostDetails.data().category}
+                                {selectedPostDetails.data().title}
                             </Typography>
+                                <Typography>{selectedPostDetails.data().category}</Typography>
+                            </>
                         }
                         subheader={selectedPostDetails.data().timestamp.toDate().toLocaleString("pl-PL")}
                     />
                     {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("image") &&
-                    <img
-                        style={{
-                            madWidth: "100%",
-                            width: "100%",
-                            height: "auto",
-                            objectFit: "contain"
-                        }}
+                    <img className={classes.image}
                         alt="image"
                         src={selectedPostDetails.data().media}/>
                     }
                     {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("video") &&
-                    <video width="100%" controls autoPlay loop muted>
+                    <video className={classes.video} controls autoPlay loop muted>
                         <source src={selectedPostDetails.data().media} type={selectedPostDetails.data().mediaType}/>
                     </video>
                     }

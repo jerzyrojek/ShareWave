@@ -21,10 +21,21 @@ import {withFirebase} from "./Firebase/context";
 const useStyles = makeStyles(() => ({
     root: {
         width: "600px",
+        padding:"0.5rem",
+        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
     },
     media: {
+        maxWidth: "100%",
         height: "auto",
-        paddingTop: '60%',
+    },
+    image:{
+        width: "100%",
+        objectFit: "contain",
+        cursor: "pointer"
+    },
+    video:{
+        outline:"none",
+        width: "100%",
     },
     avatar: {
         backgroundColor: "#2196f3",
@@ -86,23 +97,27 @@ const CardUserPost = ({post, ...props}) => {
 
                     }
                     title={
-                        <Typography variant="h5" onClick={handleSelectPost}>
-                            {post.data().title} {post.data().category}
-                        </Typography>
+                        <>
+                            <Typography variant="h5" onClick={handleSelectPost}>
+                                {post.data().title}</Typography>
+                            <Typography><span>{post.data().category}</span></Typography>
+                        </>
+
                     }
                     subheader={date.toLocaleString("pl-PL")}
                 />
-                {post.data().media && post.data().mediaType.includes("image") &&
-                <img onClick={handleSelectPost}
-                     style={{cursor: "pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}}
-                     alt="image"
-                     src={post.data().media}/>
+                <div className={classes.media}>
+                    {post.data().media && post.data().mediaType.includes("image") &&
+                    <img className={classes.image} onClick={handleSelectPost}
+                         alt="image"
+                         src={post.data().media}/>
+                    }
+                    {post.data().media && post.data().mediaType.includes("video") &&
+                    <video className={classes.video} controls loop muted>
+                        <source src={post.data().media} type={post.data().mediaType}/>
+                    </video>
                 }
-                {post.data().media && post.data().mediaType.includes("video") &&
-                <video width="100%" controls loop muted>
-                    <source src={post.data().media} type={post.data().mediaType}/>
-                </video>
-                }
+                </div>
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {post.data().text}

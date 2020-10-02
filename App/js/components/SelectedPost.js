@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {withFirebase} from "./Firebase/context";
 import {makeStyles} from "@material-ui/core/styles";
@@ -58,6 +58,7 @@ const useStyles = makeStyles(() => ({
 const SelectedPost = (props) => {
     const classes = useStyles();
     const {postId} = useParams();
+    const currentUser = useContext(AuthUserContext);
     const [selectedPostDetails, setSelectedPostDetails] = useState(null);
     const [commentInput, setCommentInput] = useState({});
     const [comments, setComments] = useState(false);
@@ -110,15 +111,20 @@ const SelectedPost = (props) => {
 
     const handleCommentSubmit = (e) => {
         e.preventDefault();
-        props.firebase.database.collection("posts").doc(postId).collection("comments")
-            .add({
-                ...commentInput,
-                author: props.firebase.auth.currentUser.displayName,
-                timestamp: new Date(),
-            });
-        setCommentInput(prevState => {
-            return {...prevState, comment: ""}
-        })
+        if(currentUser){
+            props.firebase.database.collection("posts").doc(postId).collection("comments")
+                .add({
+                    ...commentInput,
+                    author: props.firebase.auth.currentUser.displayName,
+                    timestamp: new Date(),
+                });
+            setCommentInput(prevState => {
+                return {...prevState, comment: ""}
+            })
+        } else {
+            history.push(ROUTES.SIGN_IN);
+        }
+
     }
 
     return (
@@ -203,7 +209,7 @@ const SelectedPost = (props) => {
                             <TextField
                                 onChange={handleOnChange}
                                 name="comment"
-                                value={setCommentInput.comment}
+                                value={commentInput.comment}
                                 variant="outlined"
                                 required
                                 fullWidth

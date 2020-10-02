@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Toolbar} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import * as ROUTES from "../constants/routes";
@@ -8,6 +8,8 @@ import AuthUserContext from "./SessionContext";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import FileUploadModal from "./FileUploadModal";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from '@material-ui/icons/Menu';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -15,16 +17,35 @@ const useStyles = makeStyles((theme) => ({
         zIndex: theme.zIndex.drawer + 1,
     },
     toolBar: {
-        minHeight:"64px"
+        minHeight: "64px"
+    },
+    menuButton: {
+        marginRight: theme.spacing(0),
+        [theme.breakpoints.up('lg')]: {
+            display: 'none',
+        }
     }
 }));
 
 const Navbar = () => {
     const classes = useStyles();
+    const [mobileOpen, setMobileOpen] = useState();
+
+    const handleSidebarToggle = () => {
+    }
+
     return (
         <>
-            <AppBar className={classes.appBar} positon="sticky">
+            <AppBar className={classes.appBar} positon="fixed">
                 <Toolbar className={classes.toolBar}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="Open sidebar"
+                        edge="start"
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
                     <div className="app__navbar">
                         <div className="app__logo">
                             <Link to={ROUTES.HOME}>

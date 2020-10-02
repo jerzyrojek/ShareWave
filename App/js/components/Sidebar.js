@@ -13,6 +13,10 @@ import CategoryIcon from '@material-ui/icons/Category';
 import {useHistory} from "react-router-dom";
 import AuthUserContext from "./SessionContext";
 import CategorySuggestionModal from "./CategorySuggestionModal";
+import useTheme from "@material-ui/core/styles/useTheme";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 const drawerWidth = 240;
 
@@ -21,8 +25,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
+        [theme.breakpoints.up("sm")]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        }
     },
     drawerPaper: {
         width: drawerWidth,
@@ -34,12 +40,50 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    closeMenuButton: {
+        marginRight: 'auto',
+        marginLeft: 0,
+    },
+    toolbar: {
+        minHeight:"40px",
+    }
 }));
 
 const Sidebar = (props) => {
     const history = useHistory();
     const classes = useStyles();
+    const theme = useTheme();
     const [categories, setCategories] = useState(null);
+
+    const drawerContent = (
+        <div className={classes.drawerContainer}>
+            <List>
+                <AuthUserContext.Consumer>
+                    {authUser => authUser && authUser.role === "admin" ?
+                        <ListItem button onClick={handleClickAddCategory}>
+                            <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+                            <ListItemText primary="Add a Category"/>
+                        </ListItem>
+                        :
+                        <CategorySuggestionModal/>
+                    }
+                </AuthUserContext.Consumer>
+
+                <Divider/>
+                <ListItem>
+                    <ListItemIcon><CategoryIcon/></ListItemIcon>
+                    <ListItemText primary="Categories"/>
+                </ListItem>
+                <Divider/>
+                {categories && categories.map((category, index) => {
+                    return <ListItem button key={index} onClick={() => handleSelectCategory(category)}>
+                        <ListItemText primary={category.name}/>
+                    </ListItem>
+                })
+                }
+            </List>
+        </div>
+    )
 
     useEffect(() => {
         props.firebase.database.collection("categories")
@@ -71,41 +115,34 @@ const Sidebar = (props) => {
 
     return (
         <div className={classes.root}>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}>
-                <Toolbar/>
-                <div className={classes.drawerContainer}>
-                    <List>
-                        <AuthUserContext.Consumer>
-                            {authUser => authUser && authUser.role === "admin" ?
-                            <ListItem button onClick={handleClickAddCategory}>
-                                <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
-                                <ListItemText primary="Add a Category"/>
-                            </ListItem>
-                            :
-                                <CategorySuggestionModal/>
-                            }
-                        </AuthUserContext.Consumer>
-
-                        <Divider/>
-                        <ListItem>
-                            <ListItemIcon><CategoryIcon/></ListItemIcon>
-                            <ListItemText primary="Categories"/>
-                        </ListItem>
-                        <Divider/>
-                        {categories && categories.map((category, index) => {
-                            return <ListItem button key={index} onClick={() => handleSelectCategory(category)}>
-                                <ListItemText primary={category.name}/>
-                            </ListItem>
-                        })
-                        }
-                    </List>
-                </div>
-            </Drawer>
+            <Hidden lgUp implementation="js">
+                <Drawer
+                    className={classes.drawer}
+                    variant="temporary"
+                    anchor={theme.direction === "rtl" ? "right" : "left"}
+                    open={true}
+                    ModalProps={{keepMounted:true}}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}>
+                    <IconButton className={classes.closeMenuButton}>
+                        <CloseIcon/>
+                    </IconButton>
+                    {drawerContent}
+                </Drawer>
+            </Hidden>
+            <Hidden mdDown implementation="js">
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}>
+                >
+                    <Toolbar className={classes.toolbar}/>
+                    {drawerContent}
+                </Drawer>
+            </Hidden>
         </div>
     );
 }

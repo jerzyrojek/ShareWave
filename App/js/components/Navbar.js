@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {Toolbar} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import * as ROUTES from "../constants/routes";
@@ -10,6 +10,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import FileUploadModal from "./FileUploadModal";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from '@material-ui/icons/Menu';
+import {SidebarContext} from "../App";
+import ProfileMenu from "./ProfileMenu";
+import Hidden from "@material-ui/core/Hidden";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     toolBar: {
         minHeight: "64px"
     },
-    menuButton: {
+    sidebarButton: {
         marginRight: theme.spacing(0),
         [theme.breakpoints.up('lg')]: {
             display: 'none',
@@ -29,10 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () => {
     const classes = useStyles();
-    const [mobileOpen, setMobileOpen] = useState();
-
-    const handleSidebarToggle = () => {
-    }
+    const {sidebarOpen, setSidebarState} = useContext(SidebarContext);
 
     return (
         <>
@@ -42,7 +42,8 @@ const Navbar = () => {
                         color="inherit"
                         aria-label="Open sidebar"
                         edge="start"
-                        className={classes.menuButton}
+                        className={classes.sidebarButton}
+                        onClick={setSidebarState}
                     >
                         <MenuIcon/>
                     </IconButton>
@@ -70,11 +71,14 @@ const NavbarAuthorized = ({authUser}) => {
     return (
         <div className="app__menu">
             <FileUploadModal/>
-            {authUser.role === "admin" &&
-            <Link to={ROUTES.ADMIN}>Admin</Link>
-            }
-            <Link to={ROUTES.ACCOUNT}>Account</Link>
-            <SignOut/>
+            <Hidden smDown implementation="js">
+                {authUser.role === "admin" &&
+                <Link to={ROUTES.ADMIN}>Admin</Link>
+                }
+                <Link to={ROUTES.ACCOUNT}>Account</Link>
+                <SignOut/>
+            </Hidden>
+            <ProfileMenu currentUser={authUser}/>
         </div>
     );
 };

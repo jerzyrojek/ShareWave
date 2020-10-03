@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,8 +14,8 @@ import AuthUserContext from "./SessionContext";
 import CategorySuggestionModal from "./CategorySuggestionModal";
 import useTheme from "@material-ui/core/styles/useTheme";
 import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import {SidebarContext} from "../App";
+
 
 const drawerWidth = 240;
 
@@ -32,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerPaper: {
         width: drawerWidth,
+        top: "64px",
     },
     drawerContainer: {
         overflow: 'auto',
@@ -40,13 +40,9 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
-    closeMenuButton: {
-        marginRight: 'auto',
-        marginLeft: 0,
-    },
     toolbar: {
-        minHeight:"40px",
-    }
+        minHeight: "40px",
+    },
 }));
 
 const Sidebar = (props) => {
@@ -54,6 +50,8 @@ const Sidebar = (props) => {
     const classes = useStyles();
     const theme = useTheme();
     const [categories, setCategories] = useState(null);
+    const {sidebarOpen, setSidebarState} = useContext(SidebarContext);
+
 
     const drawerContent = (
         <div className={classes.drawerContainer}>
@@ -97,9 +95,9 @@ const Sidebar = (props) => {
     }, []);
 
     const handleSelectCategory = (category) => {
-            if(category){
-                history.push(`/category/${category.name}`);
-            }
+        if (category) {
+            history.push(`/category/${category.name}`);
+        }
     }
 
     const handleClickAddCategory = () => {
@@ -120,14 +118,12 @@ const Sidebar = (props) => {
                     className={classes.drawer}
                     variant="temporary"
                     anchor={theme.direction === "rtl" ? "right" : "left"}
-                    open={true}
-                    ModalProps={{keepMounted:true}}
+                    open={sidebarOpen}
+                    onClose={setSidebarState}
+                    ModalProps={{keepMounted: true}}
                     classes={{
                         paper: classes.drawerPaper,
                     }}>
-                    <IconButton className={classes.closeMenuButton}>
-                        <CloseIcon/>
-                    </IconButton>
                     {drawerContent}
                 </Drawer>
             </Hidden>
@@ -138,8 +134,6 @@ const Sidebar = (props) => {
                     classes={{
                         paper: classes.drawerPaper,
                     }}>
-                >
-                    <Toolbar className={classes.toolbar}/>
                     {drawerContent}
                 </Drawer>
             </Hidden>

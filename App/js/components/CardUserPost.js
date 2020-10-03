@@ -18,11 +18,14 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ClearIcon from '@material-ui/icons/Clear';
 import {withFirebase} from "./Firebase/context";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        width: "600px",
+        width: "100%",
         padding:"0.5rem",
         boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
+        [theme.breakpoints.up("sm")]: {
+            width:"600px"
+        }
     },
     media: {
         maxWidth: "100%",
@@ -42,6 +45,11 @@ const useStyles = makeStyles(() => ({
     },
     close: {
         color: red[700],
+    },
+    action: {
+        [theme.breakpoints.down("xs")]: {
+            alignSelf:"center"
+        }
     }
 }));
 
@@ -91,11 +99,10 @@ const CardUserPost = ({post, ...props}) => {
                                                 aria-label="settings">
                                         <ClearIcon/>
                                     </IconButton>
-
                             }
                         </AuthUserContext.Consumer>
-
                     }
+                    classes={{action:classes.action}}
                     title={
                         <>
                             <Typography variant="h5" onClick={handleSelectPost}>

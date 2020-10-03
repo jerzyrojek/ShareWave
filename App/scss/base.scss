@@ -5,9 +5,19 @@ html {
 
 .container {
   max-width: 1024px;
-  margin:0 auto;
+  margin: 0 auto;
 }
 
-.root {
-  background-color:#eceff1;
+body {
+  background-color: #eceff1;
 }
+
+
+.MuiDrawer-root {
+  top: 64px !important; //need to overwrite without important
+  .MuiBackdrop-root {
+    top: 64px;
+  }
+}
+
+

@@ -60,6 +60,7 @@ const ProfileMenu = ({currentUser}) => {
                     <AccountCircle className={classes.icon}/>
                 </IconButton>
                 <Menu
+                    className="app__menu-mobile"
                     id="menu-appbar"
                     anchorEl={anchorEl}
                     anchorOrigin={{

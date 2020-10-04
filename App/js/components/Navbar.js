@@ -18,12 +18,20 @@ import Hidden from "@material-ui/core/Hidden";
 const useStyles = makeStyles((theme) => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+
     },
     toolBar: {
-        minHeight: "64px"
+        minHeight: "64px",
+        [theme.breakpoints.down('xs')]: {
+            paddingRight: '0',
+        }
     },
     sidebarButton: {
+        "&:hover, &:active": {
+            color:theme.palette.secondary.main
+        },
         marginRight: theme.spacing(0),
+        padding:"0.5rem",
         [theme.breakpoints.up('lg')]: {
             display: 'none',
         }
@@ -78,7 +86,9 @@ const NavbarAuthorized = ({authUser}) => {
                 <Link to={ROUTES.ACCOUNT}>Account</Link>
                 <SignOut/>
             </Hidden>
-            <ProfileMenu currentUser={authUser}/>
+            <Hidden mdUp implementation="js">
+                <ProfileMenu currentUser={authUser}/>
+            </Hidden>
         </div>
     );
 };

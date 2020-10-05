@@ -20,13 +20,16 @@ const useStyles = makeStyles((theme) => ({
         outline: "none",
     },
     modalButton: {
+        [theme.breakpoints.down('xs')]: {
+            padding: '0',
+        },
         outline: "none",
         border: "0",
         display: "flex",
         alignItems: "center",
         backgroundColor: "#263238",
-        padding: "0 1rem",
-        fontSize: "1.3rem"
+        padding: "0 0.5rem",
+        fontSize: "1.3rem",
     }
 }));
 

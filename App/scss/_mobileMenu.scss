@@ -1,0 +1,39 @@
+.app__menu-mobile {
+  .MuiPaper-root {
+    background-color: #263238;
+    text-align: center;
+
+    ul {
+      li {
+        text-align: center;
+        padding: 0;
+
+        button {
+          color: white;
+          padding: 0.5rem 1rem;
+          width: 100%;
+        }
+
+        a {
+          display: block;
+          width: 100%;
+          font-size: 1.3rem;
+          color: white;
+          text-decoration: none;
+          padding: 0.5rem 1rem;
+        }
+
+        &:hover, &:active {
+          button {
+            cursor: pointer;
+            color: #2196f3;
+          }
+
+          a {
+            color: #2196f3;
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ form {
   max-width: 600px;
   display: flex;
   flex-direction: column;
+  padding:1rem;
 
   .MuiButton-root {
     align-self: flex-end;
@@ -16,7 +17,7 @@ form {
 
   .MuiListItem-root {
     align-items: flex-start;
-    padding: 0;
+    padding: 1rem;
     margin-bottom: 1rem;
     flex-direction: column;
     width: 100%;

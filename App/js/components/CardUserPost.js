@@ -18,19 +18,38 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ClearIcon from '@material-ui/icons/Clear';
 import {withFirebase} from "./Firebase/context";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        width: "600px",
+        width: "100%",
+        padding:"0.5rem",
+        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
+        [theme.breakpoints.up("sm")]: {
+            width:"600px"
+        }
     },
     media: {
+        maxWidth: "100%",
         height: "auto",
-        paddingTop: '60%',
+    },
+    image:{
+        width: "100%",
+        objectFit: "contain",
+        cursor: "pointer"
+    },
+    video:{
+        outline:"none",
+        width: "100%",
     },
     avatar: {
         backgroundColor: "#2196f3",
     },
     close: {
         color: red[700],
+    },
+    action: {
+        [theme.breakpoints.down("xs")]: {
+            alignSelf:"center"
+        }
     }
 }));
 
@@ -80,29 +99,32 @@ const CardUserPost = ({post, ...props}) => {
                                                 aria-label="settings">
                                         <ClearIcon/>
                                     </IconButton>
-
                             }
                         </AuthUserContext.Consumer>
-
                     }
+                    classes={{action:classes.action}}
                     title={
-                        <Typography variant="h5" onClick={handleSelectPost}>
-                            {post.data().title} {post.data().category}
-                        </Typography>
+                        <>
+                            <Typography variant="h5" onClick={handleSelectPost}>
+                                {post.data().title}</Typography>
+                            <Typography><span>{post.data().category}</span></Typography>
+                        </>
+
                     }
                     subheader={date.toLocaleString("pl-PL")}
                 />
-                {post.data().media && post.data().mediaType.includes("image") &&
-                <img onClick={handleSelectPost}
-                     style={{cursor: "pointer", madWidth: "100%", width: "100%", height: "auto", objectFit: "contain"}}
-                     alt="image"
-                     src={post.data().media}/>
+                <div className={classes.media}>
+                    {post.data().media && post.data().mediaType.includes("image") &&
+                    <img className={classes.image} onClick={handleSelectPost}
+                         alt="image"
+                         src={post.data().media}/>
+                    }
+                    {post.data().media && post.data().mediaType.includes("video") &&
+                    <video className={classes.video} controls loop muted>
+                        <source src={post.data().media} type={post.data().mediaType}/>
+                    </video>
                 }
-                {post.data().media && post.data().mediaType.includes("video") &&
-                <video width="100%" controls loop muted>
-                    <source src={post.data().media} type={post.data().mediaType}/>
-                </video>
-                }
+                </div>
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {post.data().text}

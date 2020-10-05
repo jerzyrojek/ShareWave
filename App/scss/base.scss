@@ -1,0 +1,23 @@
+
+html {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;;
+}
+
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+body {
+  background-color: #eceff1;
+}
+
+
+.MuiDrawer-root {
+  top: 64px !important; //need to overwrite without important
+  .MuiBackdrop-root {
+    top: 64px;
+  }
+}
+
+

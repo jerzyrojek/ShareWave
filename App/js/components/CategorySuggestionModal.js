@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -8,6 +8,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import AddBoxRoundedIcon from "@material-ui/icons/AddBoxRounded";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
+import AuthUserContext from "./SessionContext";
+import * as ROUTES from "../constants/routes";
+import {useHistory} from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -27,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
 const CategorySuggestionModal = () => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const history = useHistory();
+    const currentUser = useContext(AuthUserContext);
 
     const handleOpen = () => {
         setOpen(true);
@@ -36,12 +42,23 @@ const CategorySuggestionModal = () => {
         setOpen(false);
     };
 
+    const redirect = () => {
+        history.push(ROUTES.SIGN_IN)
+    }
+
     return (
         <>
-            <ListItem button onClick={handleOpen}>
+            {currentUser ? <ListItem button onClick={handleOpen}>
                 <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
                 <ListItemText primary="Suggest a category"/>
             </ListItem>
+            :
+                <ListItem button onClick={redirect}>
+                    <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+                    <ListItemText primary="Suggest a category"/>
+                </ListItem>
+            }
+
             <Modal
                 className={classes.modal}
                 open={open}

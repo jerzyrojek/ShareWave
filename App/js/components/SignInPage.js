@@ -97,7 +97,8 @@ const SignInPage = (props) => {
                 props.firebase.database.collection("users").doc(authUser.user.uid).set({
                     username: authUser.user.displayName,
                     email: authUser.user.email,
-                    role: "user"
+                    creationDate: new Date(),
+                    role: "user",
                 }).catch(err => {
                     setSignInInfo(prevState => (
                         {

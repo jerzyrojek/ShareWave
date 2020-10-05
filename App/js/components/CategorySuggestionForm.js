@@ -19,10 +19,10 @@ const useStyles = makeStyles((theme) => ({
 const CategorySuggestionForm = ({close, ...props}) => {
     const classes = useStyles();
     const [categoryInfo, setCategoryInfo] = useState({
-        categoryName:"",
-        description:"",
-        error:"",
-        success:false,
+        categoryName: "",
+        description: "",
+        error: "",
+        success: false,
     })
 
 
@@ -36,23 +36,23 @@ const CategorySuggestionForm = ({close, ...props}) => {
         e.preventDefault();
         setCategoryInfo(prev => ({
             ...prev,
-            error:"",
+            error: "",
             success: false
         }));
 
         props.firebase.database.collection("suggested").add({
-            name:categoryInfo.categoryName,
-            description:categoryInfo.description,
+            name: categoryInfo.categoryName,
+            description: categoryInfo.description,
             timestamp: new Date(),
         }).then(() => {
             setCategoryInfo(prev => ({...prev, success: true}))
             setTimeout(() => {
                 close();
-            },2000)
+            }, 2000)
         }).catch((err) => {
             setCategoryInfo(prev => ({
                 ...prev,
-                error:err,
+                error: err,
             }))
         })
     }
@@ -71,6 +71,7 @@ const CategorySuggestionForm = ({close, ...props}) => {
                         fullWidth
                         id="categoryName"
                         label="Category name"
+                        inputProps={{maxLength: 30}}
                     />
                 </Grid>
                 <Grid item xs={12}>

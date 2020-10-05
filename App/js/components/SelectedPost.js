@@ -30,10 +30,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
         margin: "1rem auto",
-        padding:"0.5rem",
-        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
+        padding: "0.5rem",
+        boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.3)",
         [theme.breakpoints.up("sm")]: {
-            width:"600px"
+            width: "600px"
         }
 
     },
@@ -41,20 +41,26 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: "100%",
         height: "auto",
     },
-    image:{
+    image: {
         width: "100%",
         objectFit: "contain",
         cursor: "pointer"
     },
-    video:{
-        outline:"none",
+    video: {
+        outline: "none",
         width: "100%",
     },
     avatar: {
         backgroundColor: "#2196f3",
     },
     close: {
-        color:red[700],
+        color: red[700],
+    },
+    commentSection: {
+        margin:"0 auto",
+        backgroundColor:"white",
+        paddingTop:"1rem",
+        maxWidth:"600px",
     }
 }));
 
@@ -72,7 +78,7 @@ const SelectedPost = (props) => {
         if (postId) {
             props.firebase.database.collection("posts").doc(postId)
                 .onSnapshot((snapshot => {
-                    if(mounted){
+                    if (mounted) {
                         setSelectedPostDetails(snapshot);
                     }
 
@@ -81,7 +87,7 @@ const SelectedPost = (props) => {
         props.firebase.database.collection("posts").doc(postId).collection("comments")
             .orderBy("timestamp", "desc")
             .onSnapshot((snapshot => {
-                if(mounted){
+                if (mounted) {
                     setComments(prev => snapshot.docs.map(doc => doc.data()))
                 }
             }));
@@ -102,7 +108,7 @@ const SelectedPost = (props) => {
 
     const handleDeletePost = () => {
         const confirmation = confirm("Are you sure you want to delete this post?");
-        if(confirmation === true) {
+        if (confirmation === true) {
             props.firebase.database.collection("posts").doc(selectedPostDetails.id).delete().then(() => {
                 console.log("deleted!")
             }).catch(err => {
@@ -114,7 +120,7 @@ const SelectedPost = (props) => {
 
     const handleCommentSubmit = (e) => {
         e.preventDefault();
-        if(currentUser){
+        if (currentUser) {
             props.firebase.database.collection("posts").doc(postId).collection("comments")
                 .add({
                     ...commentInput,
@@ -164,9 +170,9 @@ const SelectedPost = (props) => {
                         }
                         title={
                             <>
-                            <Typography variant="h5">
-                                {selectedPostDetails.data().title}
-                            </Typography>
+                                <Typography variant="h5">
+                                    {selectedPostDetails.data().title}
+                                </Typography>
                                 <Typography>{selectedPostDetails.data().category}</Typography>
                             </>
                         }
@@ -174,8 +180,8 @@ const SelectedPost = (props) => {
                     />
                     {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("image") &&
                     <img className={classes.image}
-                        alt="image"
-                        src={selectedPostDetails.data().media}/>
+                         alt="image"
+                         src={selectedPostDetails.data().media}/>
                     }
                     {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("video") &&
                     <video className={classes.video} controls autoPlay loop muted>
@@ -206,42 +212,44 @@ const SelectedPost = (props) => {
                     </CardActions>
                 </Card>}
 
-                <form onSubmit={handleCommentSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                onChange={handleOnChange}
-                                name="comment"
-                                value={commentInput.comment}
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="comment"
-                                helperText="Maximum 500 characters"
-                                label="Type your comment"
-                                multiline={true}
-                                rowsMax="7"
-                                inputProps={{maxLength: 500}}
-                            />
+                <div className={classes.commentSection}>
+                    <form onSubmit={handleCommentSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    onChange={handleOnChange}
+                                    name="comment"
+                                    value={commentInput.comment}
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="comment"
+                                    helperText="Maximum 500 characters"
+                                    label="Type your comment"
+                                    multiline={true}
+                                    rowsMax="7"
+                                    inputProps={{maxLength: 500}}
+                                />
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Button type="submit"
-                            variant="contained"
-                            color="secondary">
-                        Post comment
-                    </Button>
-                </form>
-                <div className="post__comments">
-                    <List>
-                        {comments && comments.map((el, index) => {
-                            return <ListItem className="comment__details" key={index}>
-                                <ListItemText primary={el.author}
-                                              secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
-                                <p>{el.comment}</p>
-                                <hr/>
-                            </ListItem>
-                        })}
-                    </List>
+                        <Button type="submit"
+                                variant="contained"
+                                color="secondary">
+                            Post comment
+                        </Button>
+                    </form>
+                    <div className="post__comments">
+                        <List>
+                            {comments && comments.map((el, index) => {
+                                return <ListItem className="comment__details" key={index}>
+                                    <ListItemText primary={el.author}
+                                                  secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
+                                    <p>{el.comment}</p>
+                                    <hr/>
+                                </ListItem>
+                            })}
+                        </List>
+                    </div>
                 </div>
             </div>
         </div>

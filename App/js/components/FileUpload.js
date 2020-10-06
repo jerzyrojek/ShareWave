@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         margin: "0.5rem 0",
     },
     input: {
-        padding:"8px"
+        padding: "8px"
     }
 }));
 
@@ -49,7 +49,7 @@ const FileUpload = ({close, ...props}) => {
         let mounted = true;
         props.firebase.database.collection("categories")
             .onSnapshot(snapshot => {
-                if(mounted) {
+                if (mounted) {
                     setSelectOptions(snapshot.docs.map(doc => ({
                         name: doc.data().name,
                     })))
@@ -64,9 +64,9 @@ const FileUpload = ({close, ...props}) => {
 
     useEffect(() => {
         let mounted = true;
-        if(url) {
+        if (url) {
             props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
-                if(mounted) {
+                if (mounted) {
                     setFileMetadata(metadata);
                 }
             });
@@ -77,7 +77,7 @@ const FileUpload = ({close, ...props}) => {
     }, [url]);
 
     useEffect(() => {
-        if(url && fileMetadata) {
+        if (url && fileMetadata) {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 media: url,
@@ -87,7 +87,7 @@ const FileUpload = ({close, ...props}) => {
                 return close();
             })
         }
-    },[fileMetadata])
+    }, [fileMetadata])
 
 
     const handleOnChange = (e) => {
@@ -106,7 +106,7 @@ const FileUpload = ({close, ...props}) => {
     const handleUploadSubmit = (e) => {
         e.preventDefault();
         if (selectedFile) {
-            const uploadFile = props.firebase.storage.ref(`media/${selectedFile.name}`).put(selectedFile);
+            const uploadFile = props.firebase.storage.ref(`media/${Date.now()}`).put(selectedFile);
             uploadFile.on("state_changed",
                 snapshot => {
                 },
@@ -156,29 +156,29 @@ const FileUpload = ({close, ...props}) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                            <FormControl fullWidth variant="outlined" className={classes.select}>
-                                <InputLabel id="categorySelect">Category</InputLabel>
-                                <Select
-                                    required
-                                    labelId="category"
-                                    name="category"
-                                    id="category"
-                                    defaultValue={""}
-                                    onChange={handleOnChange}
-                                    label="Category"
-                                >
-                                    <MenuItem disabled value={""}>
-                                        <em>Please choose a category</em>
-                                    </MenuItem>
-                                    {selectOptions && selectOptions.map((option, index) => {
-                                        return (
-                                            <MenuItem key={index} value={option.name}>
-                                                <em>{option.name}</em>
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                        <FormControl fullWidth variant="outlined" className={classes.select}>
+                            <InputLabel id="categorySelect">Category</InputLabel>
+                            <Select
+                                required
+                                labelId="category"
+                                name="category"
+                                id="category"
+                                defaultValue={""}
+                                onChange={handleOnChange}
+                                label="Category"
+                            >
+                                <MenuItem disabled value={""}>
+                                    <em>Please choose a category</em>
+                                </MenuItem>
+                                {selectOptions && selectOptions.map((option, index) => {
+                                    return (
+                                        <MenuItem key={index} value={option.name}>
+                                            <em>{option.name}</em>
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
 
                     </Grid>
                 </Grid>

@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         backgroundColor: "#2196f3",
     },
+    title:{
+      cursor:"pointer",
+    },
     close: {
         color: red[700],
     },
@@ -105,13 +108,13 @@ const CardUserPost = ({post, ...props}) => {
                     classes={{action:classes.action}}
                     title={
                         <>
-                            <Typography variant="h5" onClick={handleSelectPost}>
+                            <Typography className={classes.title} variant="h5" onClick={handleSelectPost}>
                                 {post.data().title}</Typography>
                             <Typography><span>{post.data().category}</span></Typography>
                         </>
 
                     }
-                    subheader={date.toLocaleString("pl-PL")}
+                    subheader ={<p className={classes.title} onClick={handleSelectPost}>{date.toLocaleString("pl-PL")}</p>}
                 />
                 <div className={classes.media}>
                     {post.data().media && post.data().mediaType.includes("image") &&

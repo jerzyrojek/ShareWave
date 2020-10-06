@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import {FormControl} from "@material-ui/core";
 import AuthUserContext from "./SessionContext";
+import AlertComponent from "./Alert";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -31,7 +32,6 @@ const FileUpload = ({close, ...props}) => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectOptions, setSelectOptions] = useState(null);
-    const [fileMetadata, setFileMetadata] = useState(false);
     const [url, setUrl] = useState(null);
     const currentUser = useContext(AuthUserContext);
 
@@ -44,6 +44,11 @@ const FileUpload = ({close, ...props}) => {
         text: "",
         category: "",
     });
+
+    const [status, setStatus] = useState({
+        error:"",
+        success:false,
+    })
 
     useEffect(() => {
         let mounted = true;
@@ -63,31 +68,17 @@ const FileUpload = ({close, ...props}) => {
 
 
     useEffect(() => {
-        let mounted = true;
         if (url) {
-            props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
-                if (mounted) {
-                    setFileMetadata(metadata);
-                }
-            });
-        }
-        return () => {
-            mounted = false;
-        }
-    }, [url]);
-
-    useEffect(() => {
-        if (url && fileMetadata) {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 media: url,
-                mediaType: fileMetadata.contentType,
+                mediaType: selectedFile.type,
                 timestamp: new Date(),
             }).then(() => {
                 return close();
             })
         }
-    }, [fileMetadata])
+    }, [url])
 
 
     const handleOnChange = (e) => {
@@ -105,13 +96,26 @@ const FileUpload = ({close, ...props}) => {
 
     const handleUploadSubmit = (e) => {
         e.preventDefault();
+        setStatus(prev => ({error:"", success: false}));
+
+        if (selectedFile && !selectedFile.type.includes("image") && (selectedFile && !selectedFile.type.includes("video"))){
+            setStatus(({
+                error:"Only images and videos can be uploaded",
+                success: false,
+            }))
+            return;
+        }
         if (selectedFile) {
             const uploadFile = props.firebase.storage.ref(`media/${Date.now()}`).put(selectedFile);
             uploadFile.on("state_changed",
                 snapshot => {
                 },
                 error => {
-                    console.log(error);
+                   setStatus(prev => ({
+                       ...prev,
+                       error:error.message,
+                       success: false,
+                   }))
                 },
                 () => {
                     props.firebase.storage.ref("media").child(selectedFile.name).getDownloadURL().then(urlFromFirebase =>
@@ -123,6 +127,8 @@ const FileUpload = ({close, ...props}) => {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 timestamp: new Date(),
+            }).then(() => {
+                close();
             });
         }
     };
@@ -189,6 +195,7 @@ const FileUpload = ({close, ...props}) => {
                     color="primary"
                     className={classes.submit}>Upload</Button>
             </form>
+            {status.error && <AlertComponent type="error" message={status.error}/>}
         </div>
     );
 };

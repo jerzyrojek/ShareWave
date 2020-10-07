@@ -75,7 +75,13 @@ const FileUpload = ({close, ...props}) => {
                 mediaType: selectedFile.type,
                 timestamp: new Date(),
             }).then(() => {
-                return close();
+                setStatus(prev => ({
+                    ...prev,
+                    success: true,
+                }))
+                setTimeout(() => {
+                    close();
+                }, 2000)
             })
         }
     }, [url])
@@ -128,7 +134,13 @@ const FileUpload = ({close, ...props}) => {
                 ...postDetails,
                 timestamp: new Date(),
             }).then(() => {
-                close();
+                setStatus(prev => ({
+                    ...prev,
+                    success: true,
+                }))
+                setTimeout(() => {
+                    close();
+                }, 2000)
             });
         }
     };
@@ -195,6 +207,7 @@ const FileUpload = ({close, ...props}) => {
                     color="primary"
                     className={classes.submit}>Upload</Button>
             </form>
+            {status.success && <AlertComponent type="success" message="Uploaded successfully!"/>}
             {status.error && <AlertComponent type="error" message={status.error}/>}
         </div>
     );

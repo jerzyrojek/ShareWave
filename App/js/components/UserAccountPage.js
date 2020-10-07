@@ -45,13 +45,13 @@ const UserAccountPage = (props) => {
         if (togglePosts) {
             props.firebase.database.collection("posts")
                 .where("userId", "==", `${currentUser.uid}`)
-                .orderBy("timestamp", "desc")
-                .get()
-                .then((querySnapshot) => {
+                .onSnapshot(snapshot => {
                     if (mounted) {
-                        setPosts(querySnapshot.docs);
+                        setPosts(snapshot.docs.sort((a,b) => {
+                            return b.data().timestamp - a.data().timestamp;
+                        }));
                     }
-                });
+                })
         }
 
         return () => {

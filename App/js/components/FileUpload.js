@@ -149,7 +149,7 @@ const FileUpload = ({close, ...props}) => {
         <div className="app__upload">
             <form onSubmit={handleUploadSubmit} className={classes.form}>
                 <Grid container spacing={2}>
-                    <input className={classes.input} onChange={handleFileSelect} type="file"/>
+                    <input accept="image/*, video/*" className={classes.input} onChange={handleFileSelect} type="file"/>
                     <Grid item xs={12}>
                         <TextField
                             onChange={handleOnChange}

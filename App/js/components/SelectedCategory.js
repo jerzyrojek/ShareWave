@@ -13,13 +13,14 @@ const SelectedCategory = (props) => {
         if (selectedCategoryName) {
             props.firebase.database.collection("posts")
                 .where("category", "==", `${selectedCategoryName.categoryName}`)
-                .orderBy("timestamp", "desc")
-                .get()
-                .then((querySnapshot) => {
+                .onSnapshot(snapshot => {
                     if (mounted) {
-                        setCategoryPosts(querySnapshot.docs);
+                        setCategoryPosts(snapshot.docs.sort((a, b) => {
+                                return b.data().timestamp - a.data().timestamp;
+                            }
+                        ))
                     }
-                });
+                })
         }
         return () => {
             {
@@ -29,7 +30,6 @@ const SelectedCategory = (props) => {
 
     }, [selectedCategoryName]);
 
-    //needs a fix to update posts on change but not loop
 
     return (
         <div className="app__body">

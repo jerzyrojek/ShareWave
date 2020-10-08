@@ -5,6 +5,9 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from "@material-ui/core/Button";
 import PasswordChangeForm from "./PasswordChangeForm";
+import {withFirebase} from "./Firebase/context";
+import Tooltip from "@material-ui/core/Tooltip";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -21,10 +24,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const CustomTooltip = withStyles({
+    tooltip: {
+        backgroundColor: "#f44336",
+        fontSize:"1rem",
+        color:"white",
+    },
+    arrow: {
+      color:  "#f44336",
+    }
+})(Tooltip);
 
-const PasswordChangeModal = () => {
+
+const PasswordChangeModal = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const provider = props.firebase.auth.currentUser.providerData[0].providerId;
 
     const handleOpen = () => {
         setOpen(true);
@@ -36,7 +51,14 @@ const PasswordChangeModal = () => {
 
     return (
         <>
-            <Button onClick={handleOpen} color="secondary" variant="contained">Change Password</Button>
+            {provider === "google.com" ?
+                <CustomTooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Not available for Google Sign in" arrow>
+                    <span><Button disabled variant="contained">Change Password</Button></span>
+                </CustomTooltip>
+                :
+                <Button onClick={handleOpen} color="secondary" variant="contained">Change Password</Button>
+            }
+
             <Modal
                 className={classes.modal}
                 open={open}
@@ -57,4 +79,4 @@ const PasswordChangeModal = () => {
     );
 };
 
-export default PasswordChangeModal;
+export default withFirebase(PasswordChangeModal);

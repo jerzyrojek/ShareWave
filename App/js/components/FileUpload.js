@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import {FormControl} from "@material-ui/core";
 import AuthUserContext from "./SessionContext";
+import AlertComponent from "./Alert";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         margin: "0.5rem 0",
     },
     input: {
-        padding:"8px"
+        padding: "8px"
     }
 }));
 
@@ -31,7 +32,6 @@ const FileUpload = ({close, ...props}) => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectOptions, setSelectOptions] = useState(null);
-    const [fileMetadata, setFileMetadata] = useState(false);
     const [url, setUrl] = useState(null);
     const currentUser = useContext(AuthUserContext);
 
@@ -45,11 +45,16 @@ const FileUpload = ({close, ...props}) => {
         category: "",
     });
 
+    const [status, setStatus] = useState({
+        error:"",
+        success:false,
+    })
+
     useEffect(() => {
         let mounted = true;
         props.firebase.database.collection("categories")
             .onSnapshot(snapshot => {
-                if(mounted) {
+                if (mounted) {
                     setSelectOptions(snapshot.docs.map(doc => ({
                         name: doc.data().name,
                     })))
@@ -63,31 +68,23 @@ const FileUpload = ({close, ...props}) => {
 
 
     useEffect(() => {
-        let mounted = true;
-        if(url) {
-            props.firebase.storage.ref(`media/${selectedFile.name}`).getMetadata().then(metadata => {
-                if(mounted) {
-                    setFileMetadata(metadata);
-                }
-            });
-        }
-        return () => {
-            mounted = false;
-        }
-    }, [url]);
-
-    useEffect(() => {
-        if(url && fileMetadata) {
+        if (url) {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 media: url,
-                mediaType: fileMetadata.contentType,
+                mediaType: selectedFile.type,
                 timestamp: new Date(),
             }).then(() => {
-                return close();
+                setStatus(prev => ({
+                    ...prev,
+                    success: true,
+                }))
+                setTimeout(() => {
+                    close();
+                }, 2000)
             })
         }
-    },[fileMetadata])
+    }, [url])
 
 
     const handleOnChange = (e) => {
@@ -105,13 +102,26 @@ const FileUpload = ({close, ...props}) => {
 
     const handleUploadSubmit = (e) => {
         e.preventDefault();
+        setStatus(prev => ({error:"", success: false}));
+
+        if (selectedFile && !selectedFile.type.includes("image") && (selectedFile && !selectedFile.type.includes("video"))){
+            setStatus(({
+                error:"Only images and videos can be uploaded",
+                success: false,
+            }))
+            return;
+        }
         if (selectedFile) {
-            const uploadFile = props.firebase.storage.ref(`media/${selectedFile.name}`).put(selectedFile);
+            const uploadFile = props.firebase.storage.ref(`media/${Date.now()}`).put(selectedFile);
             uploadFile.on("state_changed",
                 snapshot => {
                 },
                 error => {
-                    console.log(error);
+                   setStatus(prev => ({
+                       ...prev,
+                       error:error.message,
+                       success: false,
+                   }))
                 },
                 () => {
                     props.firebase.storage.ref("media").child(selectedFile.name).getDownloadURL().then(urlFromFirebase =>
@@ -123,6 +133,14 @@ const FileUpload = ({close, ...props}) => {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 timestamp: new Date(),
+            }).then(() => {
+                setStatus(prev => ({
+                    ...prev,
+                    success: true,
+                }))
+                setTimeout(() => {
+                    close();
+                }, 2000)
             });
         }
     };
@@ -131,7 +149,7 @@ const FileUpload = ({close, ...props}) => {
         <div className="app__upload">
             <form onSubmit={handleUploadSubmit} className={classes.form}>
                 <Grid container spacing={2}>
-                    <input className={classes.input} onChange={handleFileSelect} type="file"/>
+                    <input accept="image/*, video/*" className={classes.input} onChange={handleFileSelect} type="file"/>
                     <Grid item xs={12}>
                         <TextField
                             onChange={handleOnChange}
@@ -156,29 +174,29 @@ const FileUpload = ({close, ...props}) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                            <FormControl fullWidth variant="outlined" className={classes.select}>
-                                <InputLabel id="categorySelect">Category</InputLabel>
-                                <Select
-                                    required
-                                    labelId="category"
-                                    name="category"
-                                    id="category"
-                                    defaultValue={""}
-                                    onChange={handleOnChange}
-                                    label="Category"
-                                >
-                                    <MenuItem disabled value={""}>
-                                        <em>Please choose a category</em>
-                                    </MenuItem>
-                                    {selectOptions && selectOptions.map((option, index) => {
-                                        return (
-                                            <MenuItem key={index} value={option.name}>
-                                                <em>{option.name}</em>
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                        <FormControl fullWidth variant="outlined" className={classes.select}>
+                            <InputLabel id="categorySelect">Category</InputLabel>
+                            <Select
+                                required
+                                labelId="category"
+                                name="category"
+                                id="category"
+                                defaultValue={""}
+                                onChange={handleOnChange}
+                                label="Category"
+                            >
+                                <MenuItem disabled value={""}>
+                                    <em>Please choose a category</em>
+                                </MenuItem>
+                                {selectOptions && selectOptions.map((option, index) => {
+                                    return (
+                                        <MenuItem key={index} value={option.name}>
+                                            <em>{option.name}</em>
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
 
                     </Grid>
                 </Grid>
@@ -189,6 +207,8 @@ const FileUpload = ({close, ...props}) => {
                     color="primary"
                     className={classes.submit}>Upload</Button>
             </form>
+            {status.success && <AlertComponent type="success" message="Uploaded successfully!"/>}
+            {status.error && <AlertComponent type="error" message={status.error}/>}
         </div>
     );
 };

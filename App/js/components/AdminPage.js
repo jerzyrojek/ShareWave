@@ -39,9 +39,17 @@ const useStyles = makeStyles((theme) => ({
         border: `1px solid #eceff1`,
     },
     approve: {
+        "&:hover": {
+            backgroundColor: "#1b5e20",
+
+        },
         backgroundColor: "#4caf50",
     },
     delete: {
+        "&:hover": {
+            backgroundColor: "#b71c1c",
+
+        },
         backgroundColor: "#f44336",
     }
 }));

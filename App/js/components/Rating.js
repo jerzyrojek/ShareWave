@@ -13,18 +13,37 @@ const Rating = ({post, ...props}) => {
     const postRating = props.firebase.database.collection("posts").doc(post.id).collection("rating");
     const [toggle, setToggle] = useState(false);
     const [currentVote, setCurrentVote] = useState(0);
+    const [currentRating, setCurrentRating] = useState(null);
 
 
     useEffect(() => {
         let mounted = true;
-        setCurrentVote(0);
-        postRating.doc(`${post.id}:${currentUserId}`).get().then((doc) => {
-            if (doc.exists) {
-                setCurrentVote(prevState => doc.data());
+        postRating.onSnapshot((snapshot) => {
+            let currentCount = 0;
+            snapshot.forEach(doc => {
+                if(mounted) {
+                    return currentCount += doc.data().state;
+                }
+            })
+            setCurrentRating(currentCount);
+        })
+
+        postRating.doc(`${post.id}:${currentUserId}`)
+            .onSnapshot(snapshot => {
+                if (snapshot.exists) {
+                    setCurrentVote(snapshot.data().state);
+                }
+            })
+
+            return () => {
+            mounted = false;
             }
-        });
+
+    }, [])
 
 
+    useEffect(() => {
+        let mounted = true;
         postRating.onSnapshot((snapshot) => {
             let currentCount = 0;
             snapshot.forEach(doc => {
@@ -39,7 +58,6 @@ const Rating = ({post, ...props}) => {
 
         return () => {
             {
-                setCurrentVote(0);
                 mounted = false;
             }
         };
@@ -54,7 +72,7 @@ const Rating = ({post, ...props}) => {
                 state: 1,
             });
 
-        if (currentVote.state === 1) {
+        if (currentVote === 1) {
             postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                 setCurrentVote(0);
             })
@@ -69,7 +87,7 @@ const Rating = ({post, ...props}) => {
                 state: -1,
             });
 
-        if (currentVote.state === -1) {
+        if (currentVote === -1) {
             postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                 setCurrentVote(0);
             })
@@ -78,12 +96,12 @@ const Rating = ({post, ...props}) => {
 
     return (
         <>
-            <Typography>{post.data().rating}</Typography>
-            <IconButton color={currentVote.state === 1 ? "secondary" : "default"} onClick={handleClickLiked}
+            <Typography>{currentRating}</Typography>
+            <IconButton color={currentVote === 1 ? "secondary" : "default"} onClick={handleClickLiked}
                         aria-label="thumbsUp">
                 <ThumbUpIcon/>
             </IconButton>
-            <IconButton color={currentVote.state === -1 ? "secondary" : "default"} onClick={handleClickDisliked}
+            <IconButton color={currentVote === -1 ? "secondary" : "default"} onClick={handleClickDisliked}
                         aria-label="thumbsDown">
                 <ThumbDownIcon/>
             </IconButton>

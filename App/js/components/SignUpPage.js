@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
@@ -82,7 +82,7 @@ const SignUpFormBase = (props) => {
                 }).then(() => {
                     props.firebase.auth.currentUser.updateProfile({displayName: username}).then(() => {
                         setFormInput({...initialState});
-                        history.push(ROUTES.SIGN_IN);
+                        history.push(ROUTES.HOME);
                     })
                 })
             }).catch(err => {

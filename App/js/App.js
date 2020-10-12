@@ -17,8 +17,10 @@ import SelectedCategory from "./components/SelectedCategory";
 import AdminPage from "./components/AdminPage";
 import UserAccountPage from "./components/UserAccountPage";
 import PasswordResetPage from "./components/PasswordResetPage";
+import ScrollContext from "./components/ScrollContext";
 
-export const SidebarContext = createContext(null)
+export const SidebarContext = createContext(null);
+
 
 const theme = createMuiTheme({
     palette: {
@@ -64,6 +66,11 @@ const App = (props) => {
         setSidebar(prev => !prev);
     }
 
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const updateScrollY = (currentScroll) => {
+        setScrollPosition(currentScroll);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <AuthUserContext.Provider value={authUser}>
@@ -71,6 +78,10 @@ const App = (props) => {
                     sidebarOpen,
                     setSidebarState: changeState
                 }}>
+                    <ScrollContext.Provider value={{
+                        scrollPosition,
+                        setNewScroll: updateScrollY
+                    }}>
                     <BrowserRouter>
                         <div className="app">
                             <Navbar/>
@@ -87,6 +98,7 @@ const App = (props) => {
                             </Switch>
                         </div>
                     </BrowserRouter>
+                    </ScrollContext.Provider>
                 </SidebarContext.Provider>
             </AuthUserContext.Provider>
         </ThemeProvider>

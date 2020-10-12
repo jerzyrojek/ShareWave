@@ -97,7 +97,7 @@ const CardUserPost = ({post, ...props}) => {
                                         <ClearIcon/>
                                     </IconButton>
                                     :
-                                    (authUser && authUser.uid === post.data().userId) &&
+                                    (history.pathname !== "/" && authUser && authUser.uid === post.data().userId) &&
                                     <IconButton onClick={handleDeletePost} className={classes.close}
                                                 aria-label="settings">
                                         <ClearIcon/>

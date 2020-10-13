@@ -21,12 +21,14 @@ const Rating = ({post, ...props}) => {
         postRating.onSnapshot((snapshot) => {
             let currentCount = 0;
             snapshot.forEach(doc => {
+                    currentCount += doc.data().state;
                 if(mounted) {
-                    return currentCount += doc.data().state;
+                    setCurrentRating(currentCount);
                 }
             })
-            setCurrentRating(currentCount);
         })
+
+
 
         postRating.doc(`${post.id}:${currentUserId}`)
             .onSnapshot(snapshot => {
@@ -34,11 +36,9 @@ const Rating = ({post, ...props}) => {
                     setCurrentVote(snapshot.data().state);
                 }
             })
-
             return () => {
             mounted = false;
             }
-
     }, [])
 
 
@@ -49,10 +49,14 @@ const Rating = ({post, ...props}) => {
             snapshot.forEach(doc => {
                 currentCount += doc.data().state;
             });
+
             if (mounted) {
                 props.firebase.database.collection("posts").doc(post.id).update({
                     rating: currentCount
+                }).then(() => {
+                    setCurrentRating(currentCount);
                 })
+
             }
         });
 
@@ -64,34 +68,40 @@ const Rating = ({post, ...props}) => {
 
     }, [toggle]);
 
+
     const handleClickLiked = () => {
         setToggle(prev => !prev);
-        postRating
-            .doc(`${post.id}:${currentUserId}`)
-            .set({
-                state: 1,
-            });
-
         if (currentVote === 1) {
             postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                 setCurrentVote(0);
             })
+        } else {
+            postRating
+                .doc(`${post.id}:${currentUserId}`)
+                .set({
+                    state: 1,
+                }).then(() => {
+                setCurrentVote(1);
+            });
         }
     }
 
     const handleClickDisliked = () => {
         setToggle(prev => !prev);
-        postRating
-            .doc(`${post.id}:${currentUserId}`)
-            .set({
-                state: -1,
-            });
-
         if (currentVote === -1) {
             postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                 setCurrentVote(0);
             })
+        }else {
+            postRating
+                .doc(`${post.id}:${currentUserId}`)
+                .set({
+                    state: -1,
+                }).then(() => {
+                    setCurrentVote(-1);
+            });
         }
+
     }
 
     return (

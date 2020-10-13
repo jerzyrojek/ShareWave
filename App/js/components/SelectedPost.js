@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {withFirebase} from "./Firebase/context";
 import {makeStyles} from "@material-ui/core/styles";
@@ -57,8 +57,9 @@ const useStyles = makeStyles((theme) => ({
         color: red[700],
     },
     commentSection: {
-        margin:"0 auto",
+        margin:"1rem auto",
         backgroundColor:"white",
+        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
         paddingTop:"1rem",
         maxWidth:"600px",
     }
@@ -71,6 +72,7 @@ const SelectedPost = (props) => {
     const [selectedPostDetails, setSelectedPostDetails] = useState(null);
     const [commentInput, setCommentInput] = useState({});
     const [comments, setComments] = useState(false);
+    const commentSectionRef = useRef(null);
     const history = useHistory();
 
     useEffect(() => {
@@ -97,6 +99,12 @@ const SelectedPost = (props) => {
         }
 
     }, []);
+
+    useEffect(() => {
+        if(history.location.state?.from === "commentIcon") {
+            commentSectionRef.current.scrollIntoView({behavior:"smooth"})
+        }
+    },[selectedPostDetails])
 
 
     const handleOnChange = (e) => {
@@ -126,10 +134,12 @@ const SelectedPost = (props) => {
                     ...commentInput,
                     author: props.firebase.auth.currentUser.displayName,
                     timestamp: new Date(),
-                });
-            setCommentInput(prevState => {
-                return {...prevState, comment: ""}
-            })
+                }).then(() => {
+                setCommentInput(prevState => {
+                    return {...prevState, comment: ""}
+                })
+            });
+
         } else {
             history.push(ROUTES.SIGN_IN);
         }
@@ -238,7 +248,7 @@ const SelectedPost = (props) => {
                             Post comment
                         </Button>
                     </form>
-                    <div className="post__comments">
+                    <div ref={commentSectionRef} className="post__comments">
                         <List>
                             {comments && comments.map((el, index) => {
                                 return <ListItem className="comment__details" key={index}>

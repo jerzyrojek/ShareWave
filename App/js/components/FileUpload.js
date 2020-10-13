@@ -112,7 +112,8 @@ const FileUpload = ({close, ...props}) => {
             return;
         }
         if (selectedFile) {
-            const uploadFile = props.firebase.storage.ref(`media/${Date.now()}`).put(selectedFile);
+            const uploadDate = Date.now().toString();
+            const uploadFile = props.firebase.storage.ref(`media/${uploadDate}`).put(selectedFile);
             uploadFile.on("state_changed",
                 snapshot => {
                 },
@@ -124,7 +125,7 @@ const FileUpload = ({close, ...props}) => {
                    }))
                 },
                 () => {
-                    props.firebase.storage.ref("media").child(selectedFile.name).getDownloadURL().then(urlFromFirebase =>
+                    props.firebase.storage.ref("media").child(uploadDate).getDownloadURL().then(urlFromFirebase =>
                         setUrl(urlFromFirebase))
                 }
             )

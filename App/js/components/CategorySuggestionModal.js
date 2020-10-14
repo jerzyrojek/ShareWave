@@ -26,6 +26,15 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
         outline: "none",
     },
+    button: {
+        color:"white",
+        "&:hover":{
+            background:"rgba(33,150,243,0.5)",
+        },
+    },
+    icon: {
+        color:"white",
+    },
 }));
 
 const CategorySuggestionModal = () => {
@@ -48,13 +57,13 @@ const CategorySuggestionModal = () => {
 
     return (
         <>
-            {currentUser ? <ListItem button onClick={handleOpen}>
-                <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+            {currentUser ? <ListItem className={classes.button} button onClick={handleOpen}>
+                <ListItemIcon className={classes.icon}><AddBoxRoundedIcon/></ListItemIcon>
                 <ListItemText primary="Suggest a category"/>
             </ListItem>
             :
-                <ListItem button onClick={redirect}>
-                    <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+                <ListItem className={classes.button} button onClick={redirect}>
+                    <ListItemIcon className={classes.icon}><AddBoxRoundedIcon/></ListItemIcon>
                     <ListItemText primary="Suggest a category"/>
                 </ListItem>
             }

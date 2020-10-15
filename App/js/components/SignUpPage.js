@@ -63,6 +63,7 @@ const SignUpFormBase = (props) => {
         email: '',
         passwordOne: '',
         passwordTwo: '',
+        success:false,
         error: null,
     }
     const [formInput, setFormInput] = useState({...initialState});
@@ -72,24 +73,44 @@ const SignUpFormBase = (props) => {
         setFormInput(prev => (
             {...prev, error:""}));
         const {username, email, passwordOne} = formInput;
-        props.firebase.newUserEmailAndPassword(email, passwordOne)
-            .then(authUser => {
-                props.firebase.database.collection("users").doc(authUser.user.uid).set({
-                    username: username,
-                    email: email,
-                    creationDate: new Date(),
-                    role:"user"
-                }).then(() => {
-                    props.firebase.auth.currentUser.updateProfile({displayName: username}).then(() => {
-                        setFormInput({...initialState});
-                        history.push(ROUTES.HOME);
-                    })
-                })
-            }).catch(err => {
-            setFormInput(prev => (
-                {...prev, error:err}
-            ))
-        });
+        props.firebase.database.collection("users")
+            .where("username", "==", `${username}`)
+            .get()
+            .then((snapshot) => {
+                if(snapshot.docs.length === 0) {
+                    props.firebase.newUserEmailAndPassword(email, passwordOne)
+                        .then(authUser => {
+                            props.firebase.database.collection("users").doc(authUser.user.uid).set({
+                                username: username,
+                                email: email,
+                                creationDate: new Date(),
+                                role:"user"
+                            }).then(() => {
+                                props.firebase.auth.currentUser.updateProfile({displayName: username}).then(() => {
+                                    setFormInput({...initialState, success: true});
+                                    setTimeout(() => {
+                                        history.push(ROUTES.HOME);
+                                    },2000)
+
+                                })
+                            })
+                        }).catch(err => {
+                        setFormInput(prev => (
+                            {...prev, error:err}
+                        ))
+                    });
+                } else {
+                    setFormInput(prev => ({
+                        ...prev, error:{
+                            message:"Username taken! Please choose a different one"
+                        }
+                    }))
+                }
+            })
+
+
+
+
     }
     const handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -178,6 +199,7 @@ const SignUpFormBase = (props) => {
                 </Grid>
             </Grid>
             {formInput.error && <AlertComponent type="error" message={formInput.error.message}/>}
+            {formInput.success && <AlertComponent type="success" message="Successfully registered! Redirecting!"/>}
         </form>
     )
 }

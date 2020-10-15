@@ -20,7 +20,6 @@ const Rating = ({post, ...props}) => {
 
 
     useEffect(() => {
-        console.log("fire every time");
         let mounted = true;
         postRating.onSnapshot(snapshot => {
             let currentCount = 0;
@@ -48,7 +47,6 @@ const Rating = ({post, ...props}) => {
     useEffect(() => {
         let mounted = true;
         if(isMountedRefLike.current) {
-            console.log("liked!")
             if (currentVote === 1) {
                 postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                     if(mounted) {
@@ -96,8 +94,6 @@ const Rating = ({post, ...props}) => {
     useEffect(() => {
         let mounted = true;
         if(isMountedRefDislike.current) {
-            console.log("disliked!");
-            console.log(isMountedRefDislike);
             if (currentVote === -1) {
                 postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
                     if(mounted) {

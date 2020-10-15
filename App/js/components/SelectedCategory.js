@@ -53,11 +53,11 @@ const SelectedCategory = (props) => {
                 <Sidebar/>
             </div>
             <div className="userPosts container">
-                {categoryPosts && categoryPosts.map((doc, index) => {
+                {categoryPosts && categoryPosts.map((doc) => {
                         return (
                             <CardUserPost
                                 post={doc}
-                                key={index}
+                                key={doc.id}
                             />
                         )
                     }

@@ -41,11 +41,11 @@ const UserPostsMain = (props) => {
                 <Sidebar/>
             </div>
             <div className="userPosts container">
-                {posts && posts.sort((a,b) => b.data().rating - a.data().rating).map((doc, index) => {
+                {posts && posts.sort((a,b) => b.data().rating - a.data().rating).map((doc) => {
                     return (
                         <CardUserPost
                             post={doc}
-                            key={index}
+                            key={doc.id}
                         />
                     )
                 })

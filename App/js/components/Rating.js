@@ -23,8 +23,8 @@ const Rating = ({post, ...props}) => {
         let mounted = true;
         postRating.onSnapshot(snapshot => {
             let currentCount = 0;
-            snapshot.docChanges().forEach(change => {
-                currentCount += change.doc.data().state;
+            snapshot.forEach(doc => {
+                currentCount += doc.data().state;
                 if(mounted){
                     setCurrentRating(currentCount);
                 }

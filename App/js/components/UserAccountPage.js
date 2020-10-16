@@ -88,8 +88,8 @@ const UserAccountPage = (props) => {
                             </Card>
                         </div>
                         <div className="user__posts">
-                            {posts && togglePosts && posts.map((post, index) => {
-                                return <CardUserPost key={index} post={post}/>
+                            {posts && togglePosts && posts.map((post) => {
+                                return <CardUserPost key={post.id} post={post}/>
                             })}
                         </div>
                     </div>

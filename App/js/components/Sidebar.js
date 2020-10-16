@@ -31,10 +31,44 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerPaper: {
         width: drawerWidth,
+        background:"url(../../assets/background2.jpg) no-repeat center",
+        backgroundSize:"cover",
         top: "64px",
+        color:"white",
     },
     drawerContainer: {
+        position:"relative",
         overflow: 'auto',
+        height:"100%",
+        background:"rgba(0,0,0,0.7)",
+        '&::-webkit-scrollbar': {
+            width: '0.4em'
+        },
+        '&::-webkit-scrollbar-track': {
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: "rgba(33,150,243,0.7)",
+            outline: '1px solid slategrey'
+        }
+    },
+    icon: {
+      color:"white",
+    },
+    listItems: {
+        textAlign:"center",
+        "&:hover":{
+            background:"rgba(33,150,243,0.5)",
+        },
+    },
+    divider: {
+      backgroundColor:"rgba(255,255,255,0.5)",
+    },
+    addButton: {
+        "&:hover":{
+            background:"rgba(33,150,243,0.5)",
+        },
     },
     content: {
         flexGrow: 1,
@@ -58,8 +92,8 @@ const Sidebar = (props) => {
             <List>
                 <AuthUserContext.Consumer>
                     {authUser => authUser && authUser.role === "admin" ?
-                        <ListItem button onClick={handleClickAddCategory}>
-                            <ListItemIcon><AddBoxRoundedIcon/></ListItemIcon>
+                        <ListItem className={classes.addButton} button onClick={handleClickAddCategory}>
+                            <ListItemIcon ><AddBoxRoundedIcon className={classes.icon}/></ListItemIcon>
                             <ListItemText primary="Add a Category"/>
                         </ListItem>
                         :
@@ -67,14 +101,14 @@ const Sidebar = (props) => {
                     }
                 </AuthUserContext.Consumer>
 
-                <Divider/>
+                <Divider className={classes.divider}/>
                 <ListItem>
-                    <ListItemIcon><CategoryIcon/></ListItemIcon>
+                    <ListItemIcon ><CategoryIcon className={classes.icon}/></ListItemIcon>
                     <ListItemText primary="Categories"/>
                 </ListItem>
-                <Divider/>
+                <Divider className={classes.divider}/>
                 {categories && categories.map((category, index) => {
-                    return <ListItem button key={index} onClick={() => handleSelectCategory(category)}>
+                    return <ListItem className={classes.listItems} button key={index} onClick={() => handleSelectCategory(category)}>
                         <ListItemText primary={category.name}/>
                     </ListItem>
                 })

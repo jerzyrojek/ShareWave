@@ -68,6 +68,15 @@ const CardUserPost = ({post, ...props}) => {
         }
     }
 
+    const handleSelectPostComments = () => {
+        history.push({
+            pathname:`/post/${post.id}`,
+            state: {
+                from:"commentIcon"
+            }
+        });
+    }
+
     const handleDeletePost = () => {
         const confirmation = confirm("Are you sure you want to delete this post?");
         if(confirmation === true) {
@@ -97,7 +106,7 @@ const CardUserPost = ({post, ...props}) => {
                                         <ClearIcon/>
                                     </IconButton>
                                     :
-                                    (authUser && authUser.uid === post.data().userId) &&
+                                    (history.pathname !== "/" && authUser && authUser.uid === post.data().userId) &&
                                     <IconButton onClick={handleDeletePost} className={classes.close}
                                                 aria-label="settings">
                                         <ClearIcon/>
@@ -138,7 +147,7 @@ const CardUserPost = ({post, ...props}) => {
                         {authUser => authUser ?
                             <>
                                 <Rating post={post}/>
-                                <IconButton aria-label="comments">
+                                <IconButton onClick={handleSelectPostComments} aria-label="comments">
                                     <CommentIcon/>
                                 </IconButton>
                             </>

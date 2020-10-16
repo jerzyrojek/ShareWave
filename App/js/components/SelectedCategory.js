@@ -1,12 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import React, {useContext, useEffect, useState} from 'react';
+import {useParams,useHistory} from "react-router-dom";
 import {withFirebase} from "./Firebase/context";
 import Sidebar from "./Sidebar";
 import CardUserPost from "./CardUserPost";
+import ScrollContext from "./ScrollContext";
 
 const SelectedCategory = (props) => {
     const selectedCategoryName = useParams();
     const [categoryPosts, setCategoryPosts] = useState(null);
+    const scrollY = useContext(ScrollContext);
+    const history = useHistory();
+
 
     useEffect(() => {
         let mounted = true;
@@ -22,13 +26,25 @@ const SelectedCategory = (props) => {
                     }
                 })
         }
+
         return () => {
             {
+                scrollY.setNewScroll(window.scrollY);
                 mounted = false;
             }
         }
 
     }, [selectedCategoryName]);
+
+    useEffect(() => {
+        if(history.action === "POP" && scrollY.scrollPosition > 768){
+            setTimeout(() => {
+                window.scrollTo(0, scrollY.scrollPosition);
+            },2000);
+        } else {
+            window.scrollTo(0,0);
+        }
+    },[selectedCategoryName])
 
 
     return (
@@ -37,11 +53,11 @@ const SelectedCategory = (props) => {
                 <Sidebar/>
             </div>
             <div className="userPosts container">
-                {categoryPosts && categoryPosts.map((doc, index) => {
+                {categoryPosts && categoryPosts.map((doc) => {
                         return (
                             <CardUserPost
                                 post={doc}
-                                key={index}
+                                key={doc.id}
                             />
                         )
                     }

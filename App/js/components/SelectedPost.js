@@ -50,19 +50,40 @@ const useStyles = makeStyles((theme) => ({
         outline: "none",
         width: "100%",
     },
-    avatar: {
-        backgroundColor: "#2196f3",
-    },
     close: {
         color: red[700],
     },
+    text: {
+        color: "#000000",
+        textAlign: "justify",
+        fontSize: "1rem",
+    },
+    title: {
+        fontWeight: "700",
+    },
+    categoryWrap: {
+        margin: "0.3rem 0",
+    },
+    category: {
+        padding: "5px",
+        backgroundColor: "#263238",
+        color: "white",
+        cursor: "pointer",
+    },
+    rating: {
+        paddingLeft: "16px",
+    },
     commentSection: {
-        margin:"1rem auto",
-        backgroundColor:"white",
-        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
-        paddingTop:"1rem",
-        maxWidth:"600px",
-    }
+        margin: "1rem auto",
+        backgroundColor: "white",
+        boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.3)",
+        paddingTop: "1rem",
+        maxWidth: "600px",
+    },
+    commentDetails: {
+        backgroundColor: "#f0f2f5",
+        borderRadius: "1rem",
+    },
 }));
 
 const SelectedPost = (props) => {
@@ -73,6 +94,7 @@ const SelectedPost = (props) => {
     const [commentInput, setCommentInput] = useState({});
     const [comments, setComments] = useState(false);
     const commentSectionRef = useRef(null);
+    const newestCommentRef = useRef(null);
     const history = useHistory();
 
     useEffect(() => {
@@ -101,10 +123,10 @@ const SelectedPost = (props) => {
     }, []);
 
     useEffect(() => {
-        if(history.location.state?.from === "commentIcon") {
-            commentSectionRef.current.scrollIntoView({behavior:"smooth"})
+        if (history.location.state?.from === "commentIcon") {
+            commentSectionRef.current.scrollIntoView({behavior: "smooth"})
         }
-    },[selectedPostDetails])
+    }, [selectedPostDetails])
 
 
     const handleOnChange = (e) => {
@@ -112,6 +134,13 @@ const SelectedPost = (props) => {
         setCommentInput((prev) => {
             return {...prev, [name]: value}
         });
+    }
+
+    const handleSelectCategory = (category) => {
+        if (category) {
+            history.push(`/category/${category}`);
+
+        }
     }
 
     const handleDeletePost = () => {
@@ -135,11 +164,11 @@ const SelectedPost = (props) => {
                     author: props.firebase.auth.currentUser.displayName,
                     timestamp: new Date(),
                 }).then(() => {
+                newestCommentRef.current.scrollIntoView({behavior: "smooth", block: "center"})
                 setCommentInput(prevState => {
                     return {...prevState, comment: ""}
                 })
             });
-
         } else {
             history.push(ROUTES.SIGN_IN);
         }
@@ -155,11 +184,6 @@ const SelectedPost = (props) => {
                 {selectedPostDetails &&
                 <Card className={classes.root}>
                     <CardHeader
-                        avatar={
-                            <Avatar aria-label="post" className={classes.avatar}>
-                                {selectedPostDetails.data().author.charAt(0)}
-                            </Avatar>
-                        }
                         action={
                             <AuthUserContext.Consumer>
                                 {authUser =>
@@ -180,13 +204,21 @@ const SelectedPost = (props) => {
                         }
                         title={
                             <>
-                                <Typography variant="h5">
+                                <Typography className={classes.title} variant="h5">
                                     {selectedPostDetails.data().title}
                                 </Typography>
-                                <Typography>{selectedPostDetails.data().category}</Typography>
+                                <Typography
+                                    className={classes.categoryWrap}><span
+                                    onClick={() => handleSelectCategory(selectedPostDetails.data().category)}
+                                    className={classes.category}>{selectedPostDetails.data().category}</span></Typography>
                             </>
                         }
-                        subheader={selectedPostDetails.data().timestamp.toDate().toLocaleString("pl-PL")}
+                        subheader={
+                            <>
+                                {selectedPostDetails.data().timestamp.toDate().toLocaleString("pl-PL")}
+                                <p>Posted by {selectedPostDetails.data().author}</p>
+                            </>
+                        }
                     />
                     {selectedPostDetails.data().media && selectedPostDetails.data().mediaType.includes("image") &&
                     <img className={classes.image}
@@ -199,11 +231,13 @@ const SelectedPost = (props) => {
                     </video>
                     }
                     <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">
+                        <Typography className={classes.text} variant="body2" component="p">
                             {selectedPostDetails.data().text}
                         </Typography>
                     </CardContent>
-                    <CardActions disableSpacing>
+                    <CardActions disableSpacing classes={{
+                        root: classes.rating,
+                    }}>
                         <AuthUserContext.Consumer>
                             {authUser => authUser ? <Rating post={selectedPostDetails}/>
                                 :
@@ -250,12 +284,12 @@ const SelectedPost = (props) => {
                     </form>
                     <div ref={commentSectionRef} className="post__comments">
                         <List>
+                            <div ref={newestCommentRef}/>
                             {comments && comments.map((el, index) => {
-                                return <ListItem className="comment__details" key={index}>
+                                return <ListItem className={classes.commentDetails} key={index}>
                                     <ListItemText primary={el.author}
                                                   secondary={el.timestamp.toDate().toLocaleString("pl-PL")}/>
                                     <p>{el.comment}</p>
-                                    <hr/>
                                 </ListItem>
                             })}
                         </List>

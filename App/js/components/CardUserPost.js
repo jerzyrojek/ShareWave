@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import {red} from '@material-ui/core/colors';
@@ -21,37 +20,55 @@ import {withFirebase} from "./Firebase/context";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
-        padding:"0.5rem",
-        boxShadow:"0px 0px 10px 2px rgba(0,0,0,0.3)",
+        padding: "0.5rem",
+        boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.3)",
         [theme.breakpoints.up("sm")]: {
-            width:"600px"
+            width: "600px"
         }
     },
     media: {
         maxWidth: "100%",
         height: "auto",
     },
-    image:{
+    image: {
         width: "100%",
         objectFit: "contain",
         cursor: "pointer"
     },
-    video:{
-        outline:"none",
+    video: {
+        outline: "none",
         width: "100%",
     },
-    avatar: {
-        backgroundColor: "#2196f3",
+    title: {
+        cursor: "pointer",
+        fontWeight: "700",
     },
-    title:{
-      cursor:"pointer",
+    clickable: {
+        cursor: "pointer",
+    },
+    categoryWrap: {
+        margin: "0.3rem 0",
+    },
+    category: {
+        padding: "5px",
+        backgroundColor: "#263238",
+        color: "white",
+        cursor: "pointer",
     },
     close: {
         color: red[700],
     },
+    text: {
+        color: "#000000",
+        textAlign: "justify",
+        fontSize: "1rem",
+    },
+    rating: {
+        paddingLeft: "16px",
+    },
     action: {
         [theme.breakpoints.down("xs")]: {
-            alignSelf:"center"
+            alignSelf: "center"
         }
     }
 }));
@@ -70,16 +87,23 @@ const CardUserPost = ({post, ...props}) => {
 
     const handleSelectPostComments = () => {
         history.push({
-            pathname:`/post/${post.id}`,
+            pathname: `/post/${post.id}`,
             state: {
-                from:"commentIcon"
+                from: "commentIcon"
             }
         });
     }
 
+    const handleSelectCategory = (category) => {
+        if (category) {
+            history.push(`/category/${category}`);
+
+        }
+    }
+
     const handleDeletePost = () => {
         const confirmation = confirm("Are you sure you want to delete this post?");
-        if(confirmation === true) {
+        if (confirmation === true) {
             props.firebase.database.collection("posts").doc(post.id).delete().then(() => {
                 console.log("deleted!")
             }).catch(err => {
@@ -92,11 +116,6 @@ const CardUserPost = ({post, ...props}) => {
         <>
             {post.id && <Card className={classes.root}>
                 <CardHeader
-                    avatar={
-                        <Avatar aria-label="post" className={classes.avatar}>
-                            {post.data().author.charAt(0)}
-                        </Avatar>
-                    }
                     action={
                         <AuthUserContext.Consumer>
                             {authUser =>
@@ -114,16 +133,24 @@ const CardUserPost = ({post, ...props}) => {
                             }
                         </AuthUserContext.Consumer>
                     }
-                    classes={{action:classes.action}}
+                    classes={{action: classes.action}}
                     title={
                         <>
                             <Typography className={classes.title} variant="h5" onClick={handleSelectPost}>
                                 {post.data().title}</Typography>
-                            <Typography><span>{post.data().category}</span></Typography>
+                            <Typography className={classes.categoryWrap}><span
+                                onClick={() => handleSelectCategory(post.data().category)}
+                                className={classes.category}>{post.data().category}</span></Typography>
                         </>
-
                     }
-                    subheader ={<p className={classes.title} onClick={handleSelectPost}>{date.toLocaleString("pl-PL")}</p>}
+                    subheader={
+                        <>
+                            <p className={classes.clickable}
+                               onClick={handleSelectPost}>{date.toLocaleString("pl-PL")}</p>
+                            <p className={classes.clickable} onClick={handleSelectPost}>Posted
+                                by {post.data().author}</p>
+                        </>
+                    }
                 />
                 <div className={classes.media}>
                     {post.data().media && post.data().mediaType.includes("image") &&
@@ -135,14 +162,16 @@ const CardUserPost = ({post, ...props}) => {
                     <video className={classes.video} controls loop muted>
                         <source src={post.data().media} type={post.data().mediaType}/>
                     </video>
-                }
+                    }
                 </div>
                 <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography className={classes.text} variant="body2" component="p">
                         {post.data().text}
                     </Typography>
                 </CardContent>
-                <CardActions disableSpacing>
+                <CardActions disableSpacing classes={{
+                    root: classes.rating,
+                }}>
                     <AuthUserContext.Consumer>
                         {authUser => authUser ?
                             <>

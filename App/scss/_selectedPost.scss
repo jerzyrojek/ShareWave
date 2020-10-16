@@ -15,17 +15,16 @@ form {
   margin: auto;
   max-width: 600px;
 
+  ul {
+    padding:0.5rem 1rem;
+  }
+
   .MuiListItem-root {
     align-items: flex-start;
     padding: 1rem;
     margin-bottom: 1rem;
     flex-direction: column;
     width: 100%;
-
-    hr {
-      margin-top: 1rem;
-      width: 100%;
-    }
 
     span {
       font-weight: 600;

@@ -130,7 +130,13 @@ const FileUpload = ({close, ...props}) => {
                 }
             )
 
-        } else {
+        } else if( !selectedFile && postDetails.text.length < 15){
+            setStatus({
+                success: false,
+                error:"Post needs either media or text content(Minimum 15 characters)",
+            })
+            return;
+        }else{
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 timestamp: new Date(),
@@ -157,6 +163,8 @@ const FileUpload = ({close, ...props}) => {
                             name="title"
                             value={postDetails.title}
                             variant="outlined"
+                            inputProps={{maxLength: 50}}
+                            helperText="Maximum 50 characters"
                             required
                             fullWidth
                             id="postTitle"
@@ -165,6 +173,8 @@ const FileUpload = ({close, ...props}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
+                            multiline={true}
+                            rowsMax="7"
                             onChange={handleOnChange}
                             value={postDetails.text}
                             variant="outlined"

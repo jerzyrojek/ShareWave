@@ -161,7 +161,7 @@ const SelectedPost = (props) => {
             props.firebase.database.collection("posts").doc(postId).collection("comments")
                 .add({
                     ...commentInput,
-                    author: props.firebase.auth.currentUser.displayName,
+                    author: currentUser.username,
                     timestamp: new Date(),
                 }).then(() => {
                 newestCommentRef.current.scrollIntoView({behavior: "smooth", block: "center"})

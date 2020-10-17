@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
     form: {
         width: '100%',
         marginTop: theme.spacing(3),
+        backgroundColor:"white",
+        boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.3)",
     },
     title: {
         margin: "1rem 0"

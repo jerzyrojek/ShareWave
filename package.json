@@ -8,7 +8,7 @@
     "start": "webpack-dev-server --hot -d",
     "build": "webpack -p",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

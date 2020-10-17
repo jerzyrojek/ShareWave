@@ -15,6 +15,7 @@ import CategorySuggestionModal from "./CategorySuggestionModal";
 import useTheme from "@material-ui/core/styles/useTheme";
 import Hidden from "@material-ui/core/Hidden";
 import {SidebarContext} from "../App";
+import url from '../../assets/background.jpg'
 
 
 const drawerWidth = 240;
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerPaper: {
         width: drawerWidth,
-        background: "url(../../assets/background.jpg) no-repeat center",
+        background: `url(${url}) no-repeat center`,
         backgroundSize: "cover",
         top: "64px",
         color: "white",

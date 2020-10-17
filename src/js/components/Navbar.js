@@ -13,6 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {SidebarContext} from "../App";
 import ProfileMenu from "./ProfileMenu";
 import Hidden from "@material-ui/core/Hidden";
+import logo from '../../assets/logo.png'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +60,7 @@ const Navbar = () => {
                         <div className="app__logo">
                             <Link to={ROUTES.HOME}>
                                 <Typography variant="h5" color="secondary"><span>Share</span>Wave</Typography>
-                                <img alt="logo" src="../../assets/logo.png"/>
+                                <img alt="logo" src={logo}/>
                             </Link>
                         </div>
                         <AuthUserContext.Consumer>

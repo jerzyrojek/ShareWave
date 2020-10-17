@@ -3,6 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import image from '../../assets/notfound.png'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,7 +48,7 @@ const NotFoundPage = () => {
     return (
         <div className={classes.root}>
             <Typography className={classes.element} variant="h3">Page not found</Typography>
-            <img className={classes.image} alt="not found icon" src="../../assets/notfound.png"/>
+            <img className={classes.image} alt="not found icon" src={image}/>
             <Typography className={classes.element} variant="h4">Oops! Looks like the <span>(Share)Waves</span> took you
                 too far!</Typography>
             <Button className={classes.element} onClick={handleRouteHome} variant="contained" color="secondary">Go back

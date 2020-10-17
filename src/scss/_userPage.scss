@@ -1,0 +1,26 @@
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .user__details {
+    button {
+      margin: 0.5rem;
+    }
+  }
+
+  .user__posts {
+    > div {
+      margin: 1rem 0;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .user {
+    .user__details {
+      width: 100%;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
-const entryPath = "App";
+const entryPath = "src";
 const entryFile = "index.js"
 const dotenv = require('dotenv').config({path: __dirname + '/.env'});
 

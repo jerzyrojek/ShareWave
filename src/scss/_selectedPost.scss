@@ -1,0 +1,37 @@
+form {
+  margin: auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  padding:1rem;
+
+  .MuiButton-root {
+    align-self: flex-end;
+  }
+}
+
+
+.post__comments {
+  margin: auto;
+  max-width: 600px;
+
+  ul {
+    padding:0.5rem 1rem;
+  }
+
+  .MuiListItem-root {
+    align-items: flex-start;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    width: 100%;
+
+    span {
+      font-weight: 600;
+    }
+
+    p {
+      text-align: justify;
+    }
+  }
+}

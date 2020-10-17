@@ -41,7 +41,7 @@ jobs:
         MEASUREMENT_ID: ${{secrets.MEASUREMENT_ID}}
 
     - name: Move build
-        run: |
+      run: |
           mkdir dist
           mkdir dist/build
           cp src/build/out.js dist/build

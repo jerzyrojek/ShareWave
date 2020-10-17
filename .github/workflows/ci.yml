@@ -44,7 +44,7 @@ jobs:
       run: |
           mkdir dist
           mkdir dist/build
-          cp src/build/out.js dist/build
+          cp src/build/out.js dist/build/
           cp src/index.html dist/
 
         

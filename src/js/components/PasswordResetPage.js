@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         marginTop: theme.spacing(3),
     },
-    title:{
-      margin:"1rem 0"
+    title: {
+        margin: "1rem 0"
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
 const PasswordResetPage = (props) => {
     const classes = useStyles();
     const [pwResetForm, setPwResetForm] = useState({
-        email:"",
-        error:"",
-        success:null
+        email: "",
+        error: "",
+        success: null
     });
 
 
@@ -38,14 +38,14 @@ const PasswordResetPage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setPwResetForm(prev => ({...prev, error:"", success:null}));
+        setPwResetForm(prev => ({...prev, error: "", success: null}));
         props.firebase.passwordReset(pwResetForm.email).then(() => {
             setPwResetForm(prev => ({...prev, success: true}));
 
         }).catch((err) => {
             setPwResetForm(prev => ({
                 ...prev,
-                error:err
+                error: err
             }))
         })
     }

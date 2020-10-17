@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {useParams,useHistory} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import {withFirebase} from "./Firebase/context";
 import Sidebar from "./Sidebar";
 import CardUserPost from "./CardUserPost";
@@ -37,14 +37,14 @@ const SelectedCategory = (props) => {
     }, [selectedCategoryName]);
 
     useEffect(() => {
-        if(history.action === "POP" && scrollY.scrollPosition > 768){
+        if (history.action === "POP" && scrollY.scrollPosition > 768) {
             setTimeout(() => {
                 window.scrollTo(0, scrollY.scrollPosition);
-            },2000);
+            }, 2000);
         } else {
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
-    },[selectedCategoryName])
+    }, [selectedCategoryName])
 
 
     return (

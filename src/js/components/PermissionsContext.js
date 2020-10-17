@@ -18,7 +18,7 @@ const withPermissions = condition => Component => {
                 () => {
                     history.push(ROUTES.SIGN_IN);
                 }
-                );
+            );
 
             return () => {
                 listener();

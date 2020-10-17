@@ -25,7 +25,7 @@ const Rating = ({post, ...props}) => {
             let currentCount = 0;
             snapshot.forEach(doc => {
                 currentCount += doc.data().state;
-                if(mounted){
+                if (mounted) {
                     setCurrentRating(currentCount);
                 }
             })
@@ -34,7 +34,7 @@ const Rating = ({post, ...props}) => {
                 return doc.id === `${post.id}:${currentUserId}`
             })
 
-            if(vote.length === 1 && mounted) {
+            if (vote.length === 1 && mounted) {
                 setCurrentVote(vote[0].data().state);
             }
         })
@@ -46,22 +46,22 @@ const Rating = ({post, ...props}) => {
 
     useEffect(() => {
         let mounted = true;
-        if(isMountedRefLike.current) {
+        if (isMountedRefLike.current) {
             if (currentVote === 1) {
                 postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
-                    if(mounted) {
+                    if (mounted) {
                         setCurrentVote(0);
                     }
                 })
-            } else{
+            } else {
                 postRating
                     .doc(`${post.id}:${currentUserId}`)
                     .set({
                         state: 1,
                     }).then(() => {
-                        if(mounted) {
-                            setCurrentVote(1);
-                        }
+                    if (mounted) {
+                        setCurrentVote(1);
+                    }
                 });
             }
 
@@ -74,7 +74,7 @@ const Rating = ({post, ...props}) => {
                 props.firebase.database.collection("posts").doc(post.id).update({
                     rating: currentCount
                 }).then(() => {
-                    if(mounted){
+                    if (mounted) {
                         setCurrentRating(currentCount);
                     }
                 })
@@ -88,27 +88,27 @@ const Rating = ({post, ...props}) => {
         return () => {
             mounted = false;
         }
-    },[likedToggle]);
+    }, [likedToggle]);
 
 
     useEffect(() => {
         let mounted = true;
-        if(isMountedRefDislike.current) {
+        if (isMountedRefDislike.current) {
             if (currentVote === -1) {
                 postRating.doc(`${post.id}:${currentUserId}`).delete().then(() => {
-                    if(mounted) {
+                    if (mounted) {
                         setCurrentVote(0);
                     }
                 })
-            }else{
+            } else {
                 postRating
                     .doc(`${post.id}:${currentUserId}`)
                     .set({
                         state: -1,
                     }).then(() => {
-                        if(mounted) {
-                            setCurrentVote(-1);
-                        }
+                    if (mounted) {
+                        setCurrentVote(-1);
+                    }
                 });
             }
 
@@ -121,7 +121,7 @@ const Rating = ({post, ...props}) => {
                 props.firebase.database.collection("posts").doc(post.id).update({
                     rating: currentCount
                 }).then(() => {
-                    if(mounted){
+                    if (mounted) {
                         setCurrentRating(currentCount);
                     }
                 })
@@ -135,13 +135,13 @@ const Rating = ({post, ...props}) => {
         return () => {
             mounted = false;
         }
-    },[dislikedToggle]);
+    }, [dislikedToggle]);
 
 
     const handleClickLiked = () => {
         setLikedToggle(prev => !prev);
     }
-    
+
     const handleClickDisliked = () => {
         setDislikedToggle(prev => !prev);
     }

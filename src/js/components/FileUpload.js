@@ -46,8 +46,8 @@ const FileUpload = ({close, ...props}) => {
     });
 
     const [status, setStatus] = useState({
-        error:"",
-        success:false,
+        error: "",
+        success: false,
     })
 
     useEffect(() => {
@@ -102,11 +102,11 @@ const FileUpload = ({close, ...props}) => {
 
     const handleUploadSubmit = (e) => {
         e.preventDefault();
-        setStatus(prev => ({error:"", success: false}));
+        setStatus(prev => ({error: "", success: false}));
 
-        if (selectedFile && !selectedFile.type.includes("image") && (selectedFile && !selectedFile.type.includes("video"))){
+        if (selectedFile && !selectedFile.type.includes("image") && (selectedFile && !selectedFile.type.includes("video"))) {
             setStatus(({
-                error:"Only images and videos can be uploaded",
+                error: "Only images and videos can be uploaded",
                 success: false,
             }))
             return;
@@ -118,11 +118,11 @@ const FileUpload = ({close, ...props}) => {
                 snapshot => {
                 },
                 error => {
-                   setStatus(prev => ({
-                       ...prev,
-                       error:error.message,
-                       success: false,
-                   }))
+                    setStatus(prev => ({
+                        ...prev,
+                        error: error.message,
+                        success: false,
+                    }))
                 },
                 () => {
                     props.firebase.storage.ref("media").child(uploadDate).getDownloadURL().then(urlFromFirebase =>
@@ -130,13 +130,13 @@ const FileUpload = ({close, ...props}) => {
                 }
             )
 
-        } else if( !selectedFile && postDetails.text.length < 15){
+        } else if (!selectedFile && postDetails.text.length < 15) {
             setStatus({
                 success: false,
-                error:"Post needs either media or text content(Minimum 15 characters)",
+                error: "Post needs either media or text content(Minimum 15 characters)",
             })
             return;
-        }else{
+        } else {
             props.firebase.database.collection("posts").add({
                 ...postDetails,
                 timestamp: new Date(),

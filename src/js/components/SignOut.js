@@ -7,13 +7,13 @@ import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        outline:"none",
-        border:"0",
-        display:"flex",
-        alignItems:"center",
-        backgroundColor:"#263238",
-        padding:"0 0.5rem",
-        fontSize:"1.3rem"
+        outline: "none",
+        border: "0",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#263238",
+        padding: "0 0.5rem",
+        fontSize: "1.3rem"
     }
 }))
 
@@ -29,7 +29,7 @@ const SignOut = (props) => {
 
     return (
         <button className={classes.button} onClick={handleClickSignOut}>
-          <MeetingRoomIcon/>  Logout
+            <MeetingRoomIcon/> Logout
         </button>
     );
 };

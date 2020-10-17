@@ -82,22 +82,22 @@ const App = (props) => {
                         scrollPosition,
                         setNewScroll: updateScrollY
                     }}>
-                    <BrowserRouter>
-                        <div className="app">
-                            <Navbar/>
-                            <Switch>
-                                <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
-                                <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
-                                <Route path={ROUTES.ACCOUNT} component={UserAccountPage}/>
-                                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordResetPage}/>
-                                <Route path={ROUTES.ADMIN} component={AdminPage}/>
-                                <Route path={ROUTES.POST} component={SelectedPost}/>
-                                <Route path={ROUTES.CATEGORY} component={SelectedCategory}/>
-                                <Route exact path={ROUTES.HOME} component={UserPostsMain}/>
-                                <Route path={ROUTES.NOT_FOUND} component={NotFoundPage}/>
-                            </Switch>
-                        </div>
-                    </BrowserRouter>
+                        <BrowserRouter>
+                            <div className="app">
+                                <Navbar/>
+                                <Switch>
+                                    <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
+                                    <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
+                                    <Route path={ROUTES.ACCOUNT} component={UserAccountPage}/>
+                                    <Route path={ROUTES.PASSWORD_FORGET} component={PasswordResetPage}/>
+                                    <Route path={ROUTES.ADMIN} component={AdminPage}/>
+                                    <Route path={ROUTES.POST} component={SelectedPost}/>
+                                    <Route path={ROUTES.CATEGORY} component={SelectedCategory}/>
+                                    <Route exact path={ROUTES.HOME} component={UserPostsMain}/>
+                                    <Route path={ROUTES.NOT_FOUND} component={NotFoundPage}/>
+                                </Switch>
+                            </div>
+                        </BrowserRouter>
                     </ScrollContext.Provider>
                 </SidebarContext.Provider>
             </AuthUserContext.Provider>

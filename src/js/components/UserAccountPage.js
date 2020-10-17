@@ -24,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     labels: {
-        fontWeight:"bold",
+        fontWeight: "bold",
     },
     controls: {
         display: "flex",
         justifyContent: "center",
-        marginTop:"1rem",
+        marginTop: "1rem",
     }
 }));
 
@@ -47,7 +47,7 @@ const UserAccountPage = (props) => {
                 .where("userId", "==", `${currentUser.uid}`)
                 .onSnapshot(snapshot => {
                     if (mounted) {
-                        setPosts(snapshot.docs.sort((a,b) => {
+                        setPosts(snapshot.docs.sort((a, b) => {
                             return b.data().timestamp - a.data().timestamp;
                         }));
                     }
@@ -75,15 +75,18 @@ const UserAccountPage = (props) => {
                         <div className="user__details">
                             <Card className={classes.root}>
                                 <Typography color="secondary" variant="h3">Account Page</Typography>
-                                <Typography className={classes.labels} color="secondary" variant="h5">Display name</Typography>
+                                <Typography className={classes.labels} color="secondary" variant="h5">Display
+                                    name</Typography>
                                 <Typography variant="h5">{authUser.username}</Typography>
                                 <Typography className={classes.labels} color="secondary" variant="h5">Email</Typography>
                                 <Typography variant="h5">{authUser.email}</Typography>
-                                <Typography className={classes.labels} color="secondary" variant="h5">Creation date</Typography>
+                                <Typography className={classes.labels} color="secondary" variant="h5">Creation
+                                    date</Typography>
                                 <Typography>{authUser.creationDate.toDate().toLocaleString("PL-pl")}</Typography>
                                 <div className={classes.controls}>
                                     <PasswordChangeModal/>
-                                    <Button color="secondary" variant="contained" onClick={showPosts}>Show my posts</Button>
+                                    <Button color="secondary" variant="contained" onClick={showPosts}>Show my
+                                        posts</Button>
                                 </div>
                             </Card>
                         </div>

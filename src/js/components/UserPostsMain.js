@@ -16,7 +16,7 @@ const UserPostsMain = (props) => {
         props.firebase.database.collection("posts")
             .get()
             .then(querySnapshot => {
-                if(mounted) {
+                if (mounted) {
                     setPosts(querySnapshot.docs)
                 }
             })
@@ -25,15 +25,15 @@ const UserPostsMain = (props) => {
             scrollY.setNewScroll(window.scrollY);
             mounted = false;
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
-        if(history.action === "POP" && scrollY.scrollPosition > 500){
+        if (history.action === "POP" && scrollY.scrollPosition > 500) {
             setTimeout(() => {
                 window.scrollTo(0, scrollY.scrollPosition);
-            },2000)
+            }, 2000)
         }
-    },[posts])
+    }, [posts])
 
     return (
         <div className="app__body">
@@ -41,7 +41,7 @@ const UserPostsMain = (props) => {
                 <Sidebar/>
             </div>
             <div className="userPosts container">
-                {posts && posts.sort((a,b) => b.data().rating - a.data().rating).map((doc) => {
+                {posts && posts.sort((a, b) => b.data().rating - a.data().rating).map((doc) => {
                     return (
                         <CardUserPost
                             post={doc}

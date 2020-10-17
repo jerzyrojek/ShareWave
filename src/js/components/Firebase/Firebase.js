@@ -57,8 +57,8 @@ class Firebase {
                         email: authUser.email,
                         ...(databaseUser)
                     }
-                        next(authUser);
-                    });
+                    next(authUser);
+                });
             } else {
                 fallback();
             }

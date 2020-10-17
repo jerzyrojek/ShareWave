@@ -63,7 +63,7 @@ const SignUpFormBase = (props) => {
         email: '',
         passwordOne: '',
         passwordTwo: '',
-        success:false,
+        success: false,
         error: null,
     }
     const [formInput, setFormInput] = useState({...initialState});
@@ -71,44 +71,42 @@ const SignUpFormBase = (props) => {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         setFormInput(prev => (
-            {...prev, error:""}));
+            {...prev, error: ""}));
         const {username, email, passwordOne} = formInput;
         props.firebase.database.collection("users")
             .where("username", "==", `${username}`)
             .get()
             .then((snapshot) => {
-                if(snapshot.docs.length === 0) {
+                if (snapshot.docs.length === 0) {
                     props.firebase.newUserEmailAndPassword(email, passwordOne)
                         .then(authUser => {
                             props.firebase.database.collection("users").doc(authUser.user.uid).set({
                                 username: username,
                                 email: email,
                                 creationDate: new Date(),
-                                role:"user"
+                                role: "user"
                             }).then(() => {
                                 props.firebase.auth.currentUser.updateProfile({displayName: username}).then(() => {
                                     setFormInput({...initialState, success: true});
                                     setTimeout(() => {
                                         history.push(ROUTES.HOME);
-                                    },2000)
+                                    }, 2000)
 
                                 })
                             })
                         }).catch(err => {
                         setFormInput(prev => (
-                            {...prev, error:err}
+                            {...prev, error: err}
                         ))
                     });
                 } else {
                     setFormInput(prev => ({
-                        ...prev, error:{
-                            message:"Username taken! Please choose a different one"
+                        ...prev, error: {
+                            message: "Username taken! Please choose a different one"
                         }
                     }))
                 }
             })
-
-
 
 
     }

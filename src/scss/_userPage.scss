@@ -16,3 +16,11 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .user {
+    .user__details {
+      width: 100%;
+    }
+  }
+}

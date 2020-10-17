@@ -75,7 +75,7 @@ const PasswordChangeForm = ({close, ...props}) => {
         e.preventDefault();
         setPasswords(prev => ({
             ...prev,
-            error:"",
+            error: "",
             success: false
         }));
         updateUserPassword(passwords.currentPassword, passwords.newPasswordOne);

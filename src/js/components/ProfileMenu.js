@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             backgroundColor: "rgba(33, 150, 243, 0.04)",
         },
-        padding:"0.5rem",
+        padding: "0.5rem",
         marginRight: theme.spacing(0),
         [theme.breakpoints.up('md')]: {
             display: 'none',

@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     },
     sidebarButton: {
         "&:hover, &:active": {
-            color:theme.palette.secondary.main
+            color: theme.palette.secondary.main
         },
         marginRight: theme.spacing(0),
-        padding:"0.5rem",
+        padding: "0.5rem",
         [theme.breakpoints.up('lg')]: {
             display: 'none',
         }

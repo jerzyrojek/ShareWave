@@ -27,11 +27,11 @@ const useStyles = makeStyles((theme) => ({
 const CustomTooltip = withStyles({
     tooltip: {
         backgroundColor: "#f44336",
-        fontSize:"1rem",
-        color:"white",
+        fontSize: "1rem",
+        color: "white",
     },
     arrow: {
-      color:  "#f44336",
+        color: "#f44336",
     }
 })(Tooltip);
 
@@ -52,7 +52,8 @@ const PasswordChangeModal = (props) => {
     return (
         <>
             {provider === "google.com" ?
-                <CustomTooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Not available for Google Sign in" arrow>
+                <CustomTooltip TransitionComponent={Fade} TransitionProps={{timeout: 600}}
+                               title="Not available for Google Sign in" arrow>
                     <span><Button disabled variant="contained">Change Password</Button></span>
                 </CustomTooltip>
                 :

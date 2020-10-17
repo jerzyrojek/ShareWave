@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
         outline: "none",
     },
     button: {
-        color:"white",
-        "&:hover":{
-            background:"rgba(33,150,243,0.5)",
+        color: "white",
+        "&:hover": {
+            background: "rgba(33,150,243,0.5)",
         },
     },
     icon: {
-        color:"white",
+        color: "white",
     },
 }));
 
@@ -58,10 +58,10 @@ const CategorySuggestionModal = () => {
     return (
         <>
             {currentUser ? <ListItem className={classes.button} button onClick={handleOpen}>
-                <ListItemIcon className={classes.icon}><AddBoxRoundedIcon/></ListItemIcon>
-                <ListItemText primary="Suggest a category"/>
-            </ListItem>
-            :
+                    <ListItemIcon className={classes.icon}><AddBoxRoundedIcon/></ListItemIcon>
+                    <ListItemText primary="Suggest a category"/>
+                </ListItem>
+                :
                 <ListItem className={classes.button} button onClick={redirect}>
                     <ListItemIcon className={classes.icon}><AddBoxRoundedIcon/></ListItemIcon>
                     <ListItemText primary="Suggest a category"/>

@@ -39,6 +39,14 @@ jobs:
         MESSAGING_SENDER_ID: ${{secrets.MESSAGING_SENDER_ID}}
         APP_ID: ${{secrets.APP_ID}}
         MEASUREMENT_ID: ${{secrets.MEASUREMENT_ID}}
+
+    - name: Move build
+        run: |
+          mkdir dist
+          mkdir dist/build
+          cp src/build/out.js dist/build
+          cp src/index.html dist/
+
         
     - name: Deploy
       run: |

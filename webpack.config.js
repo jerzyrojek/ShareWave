@@ -3,12 +3,13 @@ const webpack = require("webpack");
 const entryPath = "src";
 const entryFile = "index.js"
 const dotenv = require('dotenv').config({path: __dirname + '/.env'});
+const Html = require('html-webpack-plugin');
 
 module.exports = {
     entry: ["whatwg-fetch", `./${entryPath}/js/${entryFile}`],
     output: {
         filename: "out.js",
-        path: path.resolve(__dirname, `${entryPath}/build`)
+        path: path.resolve(__dirname, 'build/')
     },
     devServer: {
         contentBase: path.join(__dirname, `${entryPath}`),
@@ -60,6 +61,10 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             "process.env": JSON.stringify(process.env)
+        }),
+        new Html({
+            filename: "index.html",
+            template: `./${entryPath}/index.html`
         }),
     ]
 };

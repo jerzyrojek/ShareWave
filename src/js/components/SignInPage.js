@@ -178,12 +178,12 @@ const SignInPage = (props) => {
                         </Button>
                         <Grid className={classes.routes} container>
                             <Grid item xs>
-                                <Link to={ROUTES.PASSWORD_FORGET} variant="body2">
+                                <Link href={ROUTES.PASSWORD_FORGET} variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link to={ROUTES.SIGN_UP} variant="body2">
+                                <Link href={ROUTES.SIGN_UP} variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

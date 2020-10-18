@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --hot -d",
-    "build": "webpack -p",
+    "build": "webpack -p && cp _redirects build/_redirects",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },

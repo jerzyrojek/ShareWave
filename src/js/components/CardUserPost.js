@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import {red} from '@material-ui/core/colors';
 import CommentIcon from '@material-ui/icons/Comment';
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Rating from "./Rating";
 import AuthUserContext from "./SessionContext";
 import * as ROUTES from "../constants/routes";
@@ -183,13 +183,22 @@ const CardUserPost = ({post, ...props}) => {
                             :
                             <>
                                 <Typography>{post.data().rating}</Typography>
-                                <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsUp">
+                                <IconButton
+                                    component={Link}
+                                    to={ROUTES.SIGN_IN}
+                                    aria-label="thumbsUp">
                                     <ThumbUpIcon/>
                                 </IconButton>
-                                <IconButton href={ROUTES.SIGN_IN} aria-label="thumbsDown">
+                                <IconButton
+                                    component={Link}
+                                    to={ROUTES.SIGN_IN}
+                                    aria-label="thumbsDown">
                                     <ThumbDownIcon/>
                                 </IconButton>
-                                <IconButton href={ROUTES.SIGN_IN} aria-label="comments">
+                                <IconButton
+                                    component={Link}
+                                    to={ROUTES.SIGN_IN}
+                                    aria-label="comments">
                                     <CommentIcon/>
                                 </IconButton>
                             </>

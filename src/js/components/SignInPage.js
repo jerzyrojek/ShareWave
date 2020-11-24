@@ -3,14 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import {withFirebase} from "./Firebase/context";
-import {useHistory} from "react-router-dom";
+import {useHistory, Link} from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import app from "firebase/app";
 import AlertComponent from "./Alert";
@@ -178,12 +177,12 @@ const SignInPage = (props) => {
                         </Button>
                         <Grid className={classes.routes} container>
                             <Grid item xs>
-                                <Link href={ROUTES.PASSWORD_FORGET} variant="body2">
+                                <Link to={ROUTES.PASSWORD_FORGET} variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href={ROUTES.SIGN_UP} variant="body2">
+                                <Link to={ROUTES.SIGN_UP} variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

@@ -37,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
     },
+    link: {
+        textDecoration:"none",
+        color:"inherit",
+        "&:hover": {
+            textDecoration:"underline",
+        }
+    },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
@@ -177,13 +184,13 @@ const SignInPage = (props) => {
                         </Button>
                         <Grid className={classes.routes} container>
                             <Grid item xs>
-                                <Link to={ROUTES.PASSWORD_FORGET} variant="body2">
+                                <Link className={classes.link} to={ROUTES.PASSWORD_FORGET}>
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link to={ROUTES.SIGN_UP} variant="body2">
-                                    {"Don't have an account? Sign Up"}
+                                <Link className={classes.link} to={ROUTES.SIGN_UP}>
+                                    Don't have an account? Sign Up
                                 </Link>
                             </Grid>
                         </Grid>

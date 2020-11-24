@@ -20,6 +20,13 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
+    link: {
+      textDecoration:"none",
+      color:"inherit",
+        "&:hover": {
+            textDecoration:"underline",
+        }
+    },
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
@@ -190,7 +197,7 @@ const SignUpFormBase = (props) => {
             </Button>
             <Grid container justify="flex-end">
                 <Grid item>
-                    <Link to={ROUTES.SIGN_IN} variant="body2">
+                    <Link className={classes.link} to={ROUTES.SIGN_IN}>
                         Already have an account? Sign in
                     </Link>
                 </Grid>

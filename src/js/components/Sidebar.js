@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     drawerContainer: {
         position: "relative",
         overflow: 'auto',
-        height: "100%",
+        height: "calc(100% - 64px)",
         background: "rgba(0,0,0,0.7)",
         '&::-webkit-scrollbar': {
             width: '0.4em'

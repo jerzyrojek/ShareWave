@@ -2,6 +2,8 @@
 
 A portal that allows users to share text, images and videos. It includes a rating system as well as a comment section under each post.
 
+Project available at https://share-wave.netlify.app/
+
 ## Description
 
 Project currently still in development. It is my most ambitious application this far, it includes a lot of asynchronous requests and conditional rendering.
